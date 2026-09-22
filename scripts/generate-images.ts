@@ -70,13 +70,20 @@ const shapes: Record<string, string> = {
   "led-work-light": `<rect x="300" y="220" width="200" height="280" rx="20"/><rect x="330" y="260" width="140" height="80" fill="#fff3bf"/><rect x="370" y="500" width="60" height="80"/>`,
 };
 
-const outDir = path.join(process.cwd(), "public", "products");
-await mkdir(outDir, { recursive: true });
+async function main() {
+  const outDir = path.join(process.cwd(), "public", "products");
+  await mkdir(outDir, { recursive: true });
 
-for (const product of catalogProducts) {
-  const file = path.join(outDir, `${product.slug}.webp`);
-  const buffer = await sharp(Buffer.from(svg(product.slug))).webp({ quality: 82 }).toBuffer();
-  await writeFile(file, buffer);
+  for (const product of catalogProducts) {
+    const file = path.join(outDir, `${product.slug}.webp`);
+    const buffer = await sharp(Buffer.from(svg(product.slug))).webp({ quality: 82 }).toBuffer();
+    await writeFile(file, buffer);
+  }
+
+  console.log(`Wrote ${catalogProducts.length} images to ${outDir}`);
 }
 
-console.log(`Wrote ${catalogProducts.length} images to ${outDir}`);
+main().catch((error: unknown) => {
+  console.error(error);
+  process.exit(1);
+});

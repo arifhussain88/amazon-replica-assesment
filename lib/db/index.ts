@@ -1,5 +1,6 @@
 import "server-only";
 
+import { mkdir } from "fs/promises";
 import path from "path";
 import { sql } from "drizzle-orm";
 import { drizzle as drizzlePglite, type PgliteDatabase } from "drizzle-orm/pglite";
@@ -16,7 +17,10 @@ const globalForDb = globalThis as unknown as {
 
 export function getDb() {
   if (!globalForDb.northlineDb) {
-    globalForDb.northlineDb = openDatabase();
+    globalForDb.northlineDb = openDatabase().catch((error: unknown) => {
+      globalForDb.northlineDb = undefined;
+      throw error;
+    });
   }
   return globalForDb.northlineDb;
 }
@@ -39,6 +43,7 @@ async function openNeon(databaseUrl: string): Promise<AppDb> {
 
 async function openLocal(): Promise<AppDb> {
   const dataDir = path.join(process.cwd(), ".data", "northline");
+  await mkdir(dataDir, { recursive: true });
   const client = new PGlite(dataDir);
   await client.waitReady;
   return drizzlePglite({ client, schema });
