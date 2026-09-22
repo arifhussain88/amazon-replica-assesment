@@ -1,0 +1,12 @@
+---
+description: Automatic agent capture is installed; do not touch the logs by hand
+alwaysApply: true
+---
+
+# Agent capture
+
+Cursor project hooks in `.cursor/hooks.json` automatically write each user prompt and the final agent response to `.agent-logs/`.
+
+- Do not create, edit, tidy, summarise, or delete `.agent-logs/` entries.
+- Do not add `.agent-logs/` to `.gitignore`.
+- Do not manually reproduce a prompt or response log. The hooks own those files.
