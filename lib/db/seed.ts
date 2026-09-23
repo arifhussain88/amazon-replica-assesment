@@ -1,4 +1,4 @@
-import { count } from "drizzle-orm";
+import { count, eq } from "drizzle-orm";
 import type { PgliteDatabase } from "drizzle-orm/pglite";
 import {
   catalogCategories,
@@ -54,6 +54,20 @@ export async function syncCatalog(db: AppDb) {
   const knownProducts = new Set(productRows.map((row) => row.slug));
   const missingProducts = catalogProducts.filter((product) => !knownProducts.has(product.slug));
   if (missingProducts.length > 0) await insertCatalogProducts(db, missingProducts);
+  await repairImageUrls(db);
+}
+
+function productImageUrl(slug: string) {
+  return `/products/${slug}.${svgProductSlugs.has(slug) ? "svg" : "webp"}`;
+}
+
+async function repairImageUrls(db: AppDb) {
+  for (const slug of svgProductSlugs) {
+    await db
+      .update(productImages)
+      .set({ url: productImageUrl(slug) })
+      .where(eq(productImages.id, `img-${slug}`));
+  }
 }
 
 async function insertCategories(db: AppDb, slugs: string[]) {
@@ -116,7 +130,7 @@ async function insertCatalogProducts(db: AppDb, items: CatalogProduct[]) {
     items.map((product) => ({
       id: `img-${product.slug}`,
       productId: `prod-${product.slug}`,
-      url: `/products/${product.slug}.${svgProductSlugs.has(product.slug) ? "svg" : "webp"}`,
+      url: productImageUrl(product.slug),
       alt: product.name,
       sortOrder: 0,
     })),
@@ -135,5 +149,32 @@ async function insertCatalogProducts(db: AppDb, items: CatalogProduct[]) {
       })),
     ),
   );
+}
+
+const entry = process.argv[1]?.replaceAll("\\", "/");
+if (entry?.endsWith("lib/db/seed.ts")) {
+  void syncFromCli();
+}
+
+async function syncFromCli() {
+  const databaseUrl = process.env.DATABASE_URL;
+  if (!databaseUrl) {
+    console.error("DATABASE_URL is unset. Set it in .env.local, then run npm run db:seed.");
+    process.exitCode = 1;
+    return;
+  }
+
+  const { Pool, neonConfig } = await import("@neondatabase/serverless");
+  const ws = (await import("ws")).default;
+  neonConfig.webSocketConstructor = ws;
+  const pool = new Pool({ connectionString: databaseUrl });
+  const { drizzle } = await import("drizzle-orm/neon-serverless");
+  const db = drizzle({ client: pool, schema }) as unknown as AppDb;
+  try {
+    await syncCatalog(db);
+    console.log("Catalog image URLs synced.");
+  } finally {
+    await pool.end();
+  }
 }
 
