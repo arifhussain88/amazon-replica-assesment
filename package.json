@@ -1,0 +1,47 @@
+{
+  "name": "northline",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint",
+    "images": "tsx scripts/generate-images.ts",
+    "db:seed": "tsx lib/db/seed.ts"
+  },
+  "dependencies": {
+    "@electric-sql/pglite": "*",
+    "@neon/config": "^1.7.2",
+    "@neon/env": "^1.4.3",
+    "@neondatabase/serverless": "*",
+    "@radix-ui/react-checkbox": "*",
+    "@radix-ui/react-dialog": "*",
+    "@radix-ui/react-label": "*",
+    "@radix-ui/react-slot": "*",
+    "class-variance-authority": "*",
+    "clsx": "*",
+    "drizzle-orm": "*",
+    "lucide-react": "*",
+    "next": "16.3.6",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "server-only": "*",
+    "tailwind-merge": "*",
+    "ws": "*",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@types/ws": "*",
+    "eslint": "^9",
+    "eslint-config-next": "16.3.6",
+    "sharp": "*",
+    "tailwindcss": "^4",
+    "tsx": "*",
+    "typescript": "^5"
+  }
+}

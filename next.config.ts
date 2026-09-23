@@ -1,0 +1,8 @@
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
+  serverExternalPackages: ["@electric-sql/pglite", "@neondatabase/serverless", "ws"],
+  agentRules: false,
+};
+
+export default nextConfig;

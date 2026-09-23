@@ -1,0 +1,112 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { AddToCartForm } from "@/components/add-to-cart-form";
+import { Gallery } from "@/components/gallery";
+import { StarRating } from "@/components/star-rating";
+import { getProduct } from "@/lib/queries";
+
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const { slug } = await params;
+  const product = await getProduct(slug);
+  return { title: product?.name ?? "Product" };
+}
+
+export default async function ProductPage({ params }: { params: Promise<{ slug: string }> }) {
+  const { slug } = await params;
+  const product = await getProduct(slug);
+  if (!product) notFound();
+  const buckets = [5, 4, 3, 2, 1].map((star) => ({
+    star,
+    count: product.reviews.filter((review) => review.rating === star).length,
+  }));
+
+  return (
+    <div className="space-y-10">
+      <p className="text-sm text-neutral-600">
+        <Link href={`/search?category=${product.categorySlug}`} className="text-[#1a5276]">
+          {product.categoryName}
+        </Link>
+      </p>
+      <div className="grid gap-8 lg:grid-cols-[minmax(0,1fr)_320px]">
+        <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_280px]">
+          <Gallery images={product.images} name={product.name} />
+          <div>
+            <p className="text-sm text-neutral-600">{product.brand}</p>
+            <h1 className="mt-1 text-2xl font-semibold leading-snug">{product.name}</h1>
+            <div className="mt-2">
+              <StarRating ratingTimes10={product.ratingTimes10} count={product.ratingCount} />
+            </div>
+            <ul className="mt-4 list-disc space-y-2 pl-5 text-sm leading-6">
+              {product.features.map((feature) => (
+                <li key={feature}>{feature}</li>
+              ))}
+            </ul>
+          </div>
+        </div>
+        <aside className="h-fit rounded-md border border-[#e3e6e6] bg-white p-4 lg:sticky lg:top-4">
+          <AddToCartForm
+            productId={product.id}
+            priceCents={product.priceCents}
+            compareAtPriceCents={product.compareAtPriceCents}
+            stock={product.stock}
+            variants={product.variants}
+          />
+          <p className="mt-3 text-sm text-neutral-600">Ships as a demo order. Free shipping on qualifying totals.</p>
+        </aside>
+      </div>
+      <section className="grid gap-8 rounded-md bg-white p-5 lg:grid-cols-2">
+        <div>
+          <h2 className="text-xl font-semibold">About this item</h2>
+          <p className="mt-3 text-sm leading-7">{product.description}</p>
+        </div>
+        <div>
+          <h2 className="text-xl font-semibold">Specifications</h2>
+          <dl className="mt-3 divide-y divide-[#e3e6e6] text-sm">
+            {product.specifications.map((spec) => (
+              <div key={spec.label} className="grid grid-cols-2 gap-3 py-2">
+                <dt className="text-neutral-600">{spec.label}</dt>
+                <dd>{spec.value}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </section>
+      <section className="rounded-md bg-white p-5">
+        <h2 className="text-xl font-semibold">Customer reviews</h2>
+        <p className="mt-1 text-sm text-neutral-600">These reviews are seeded demo data for this store.</p>
+        <div className="mt-4 grid gap-6 lg:grid-cols-[220px_minmax(0,1fr)]">
+          <div>
+            <StarRating ratingTimes10={product.ratingTimes10} count={product.ratingCount} />
+            <ul className="mt-3 space-y-1 text-sm">
+              {buckets.map((bucket) => (
+                <li key={bucket.star} className="grid grid-cols-[3rem_1fr_1.5rem] items-center gap-2">
+                  <span>{bucket.star} star</span>
+                  <span className="h-2 overflow-hidden rounded bg-neutral-200">
+                    <span
+                      className="block h-full bg-[#e09a1a]"
+                      style={{ width: `${product.ratingCount ? (bucket.count / product.ratingCount) * 100 : 0}%` }}
+                    />
+                  </span>
+                  <span>{bucket.count}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <ul className="space-y-5">
+            {product.reviews.map((review) => (
+              <li key={review.id} className="border-b border-[#e3e6e6] pb-4">
+                <StarRating ratingTimes10={review.rating * 10} />
+                <p className="mt-1 font-semibold">{review.title}</p>
+                <p className="text-xs text-neutral-500">
+                  {review.author} · {new Intl.DateTimeFormat("en-US", { dateStyle: "medium" }).format(new Date(review.createdAt))} · Demo review
+                </p>
+                <p className="mt-2 text-sm leading-6">{review.body}</p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+    </div>
+  );
+}
