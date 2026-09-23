@@ -1,12 +1,16 @@
 import Link from "next/link";
+import { Suspense } from "react";
 import { ShoppingCart } from "lucide-react";
 import { DepartmentMenu } from "@/components/department-menu";
+import { SiteSearch } from "@/components/site-search";
+import { getCurrentUser } from "@/lib/auth";
 import { cartCount } from "@/lib/cart";
 import { listCategories } from "@/lib/queries";
 import { STORE_NAME } from "@/lib/store";
 
 export async function SiteHeader() {
-  const [count, categories] = await Promise.all([cartCount(), listCategories()]);
+  const [count, categories, user] = await Promise.all([cartCount(), listCategories(), getCurrentUser()]);
+  const firstName = user?.name.split(" ")[0];
 
   return (
     <header className="text-white">
@@ -19,23 +23,12 @@ export async function SiteHeader() {
             <span className="block text-neutral-300">Deliver to</span>
             <span className="font-semibold">United States</span>
           </p>
-          <form action="/search" className="flex min-w-0 flex-1">
-            <label className="sr-only" htmlFor="site-search">
-              Search Northline
-            </label>
-            <input
-              id="site-search"
-              name="q"
-              placeholder="Search Northline"
-              className="h-10 min-w-0 flex-1 rounded-l-md border-0 bg-white px-3 text-sm text-[#111] outline-none"
-            />
-            <button type="submit" className="h-10 rounded-r-md bg-[#f5b942] px-4 text-sm font-medium text-[#111]">
-              Search
-            </button>
-          </form>
-          <Link href="/orders" className="hidden text-sm leading-tight sm:block">
-            <span className="block text-xs text-neutral-300">Returns</span>
-            <span className="font-semibold">& Orders</span>
+          <Suspense fallback={<div className="h-10 min-w-0 flex-1 rounded-md bg-white/90" />}>
+            <SiteSearch />
+          </Suspense>
+          <Link href={user ? "/orders" : "/account?next=/orders"} className="hidden text-sm leading-tight sm:block">
+            <span className="block text-xs text-neutral-300">{user ? `Hello, ${firstName}` : "Hello, sign in"}</span>
+            <span className="font-semibold">Account & Orders</span>
           </Link>
           <Link href="/cart" className="relative inline-flex items-center gap-1 text-sm font-semibold">
             <ShoppingCart className="size-6" />

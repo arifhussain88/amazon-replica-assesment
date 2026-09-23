@@ -11,9 +11,9 @@ export default async function HomePage() {
   return (
     <div className="space-y-8">
       <section className="rounded-md bg-white p-5">
-        <p className="text-sm text-neutral-600">Guest checkout · Prices in USD · Free shipping from {formatMoney(FREE_SHIPPING_CENTS)}</p>
+        <p className="text-sm text-neutral-600">Prices in USD · Free shipping from {formatMoney(FREE_SHIPPING_CENTS)}</p>
         <h1 className="mt-2 text-3xl font-semibold tracking-tight">{STORE_NAME}</h1>
-        <p className="mt-2 max-w-2xl text-neutral-700">Everyday goods across the house, the closet, the desk, and the trip. No account required.</p>
+        <p className="mt-2 max-w-2xl text-neutral-700">Everyday goods across the house, the closet, the desk, and the trip. Sign in when you are ready to check out.</p>
       </section>
       <section>
         <h2 className="mb-3 text-xl font-semibold">Shop by department</h2>
@@ -22,11 +22,21 @@ export default async function HomePage() {
             <Link
               key={category.slug}
               href={`/search?category=${category.slug}`}
-              className="flex h-36 flex-col justify-between rounded-md p-4"
-              style={{ backgroundColor: tileColors[index % tileColors.length] }}
+              className="overflow-hidden rounded-md bg-white"
             >
-              <span className="text-lg font-semibold leading-tight">{category.name}</span>
-              <span className="text-sm">Shop now</span>
+              <div className="aspect-[5/3] overflow-hidden" style={{ backgroundColor: tileColors[index % tileColors.length] }}>
+                {/* Department art is a fixed crop so every tile stays the same height. */}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={`/departments/${category.slug}.svg`}
+                  alt=""
+                  className="h-full w-full object-cover"
+                />
+              </div>
+              <div className="flex items-center justify-between gap-2 p-3">
+                <span className="text-sm font-semibold leading-tight">{category.name}</span>
+                <span className="shrink-0 text-sm text-[#1a5276]">Shop</span>
+              </div>
             </Link>
           ))}
         </div>

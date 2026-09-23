@@ -66,6 +66,7 @@ export type OrderLine = {
 
 export type OrderRecord = {
   orderNumber: string;
+  userId: string | null;
   email: string;
   fullName: string;
   line1: string;

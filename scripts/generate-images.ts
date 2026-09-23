@@ -1,7 +1,7 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
 import sharp from "sharp";
-import { catalogProducts } from "../lib/catalog";
+import { catalogCategories, catalogProducts } from "../lib/catalog";
 
 const accents: Record<string, string> = {
   "harbor-compact-speaker": "#2c3338",
@@ -28,6 +28,18 @@ const accents: Record<string, string> = {
   "neck-pillow": "#c5ced6",
   "cordless-screwdriver": "#f0c14b",
   "led-work-light": "#f4d35e",
+  "usb-c-hub": "#d7dde3",
+  "cotton-kitchen-towels": "#efe6d2",
+  "merino-beanie": "#4a4e57",
+  "unscented-lip-balm": "#f3efe8",
+  "shea-hand-cream": "#f7f1ea",
+  "ankle-weights": "#2f3438",
+  "weekly-planner": "#efe6d6",
+  "wooden-animal-puzzle": "#e6c39a",
+  "soft-play-balls": "#d7e4f5",
+  "toiletry-pouch": "#8aa0b4",
+  "tape-measure": "#f0c14b",
+  "claw-hammer": "#c4b59a",
 };
 
 function svg(slug: string) {
@@ -68,7 +80,43 @@ const shapes: Record<string, string> = {
   "neck-pillow": `<path d="M250 430c0-120 80-200 150-200s150 80 150 200v40H250z"/><circle cx="400" cy="360" r="50" fill="#f4f2ee"/>`,
   "cordless-screwdriver": `<rect x="180" y="360" width="360" height="70" rx="20"/><polygon points="540,360 620,395 540,430"/>`,
   "led-work-light": `<rect x="300" y="220" width="200" height="280" rx="20"/><rect x="330" y="260" width="140" height="80" fill="#fff3bf"/><rect x="370" y="500" width="60" height="80"/>`,
+  "usb-c-hub": `<rect x="220" y="340" width="360" height="90" rx="16"/><rect x="250" y="300" width="40" height="40" rx="6"/><rect x="310" y="300" width="40" height="40" rx="6"/><rect x="370" y="300" width="70" height="40" rx="6"/>`,
+  "cotton-kitchen-towels": `<rect x="230" y="260" width="140" height="280" rx="8"/><rect x="330" y="280" width="140" height="280" rx="8"/><rect x="430" y="250" width="140" height="280" rx="8"/>`,
+  "merino-beanie": `<path d="M280 420c0-140 50-220 120-220s120 80 120 220v40H280z"/><rect x="280" y="420" width="240" height="70" rx="8"/>`,
+  "unscented-lip-balm": `<ellipse cx="400" cy="430" rx="120" ry="40"/><rect x="280" y="300" width="240" height="130"/><ellipse cx="400" cy="300" rx="120" ry="40"/>`,
+  "shea-hand-cream": `<rect x="340" y="200" width="120" height="360" rx="40"/><rect x="360" y="160" width="80" height="50" rx="10" fill="#111"/>`,
+  "ankle-weights": `<rect x="180" y="340" width="180" height="90" rx="40"/><rect x="440" y="340" width="180" height="90" rx="40"/>`,
+  "weekly-planner": `<rect x="250" y="200" width="300" height="400" rx="8"/><path d="M280 280 h240 M280 340 h240 M280 400 h160" fill="none"/>`,
+  "wooden-animal-puzzle": `<rect x="220" y="240" width="360" height="320" rx="12"/><circle cx="320" cy="360" r="40"/><rect x="400" y="330" width="90" height="70" rx="12"/>`,
+  "soft-play-balls": `<circle cx="280" cy="400" r="50"/><circle cx="400" cy="360" r="50"/><circle cx="510" cy="410" r="50"/><circle cx="350" cy="470" r="40"/><circle cx="460" cy="480" r="40"/>`,
+  "toiletry-pouch": `<rect x="260" y="250" width="280" height="280" rx="16"/><path d="M360 250 v-40 h80 v40" fill="none"/><rect x="300" y="320" width="200" height="120" fill="#f4f2ee"/>`,
+  "tape-measure": `<rect x="280" y="280" width="200" height="200" rx="24"/><circle cx="380" cy="380" r="50" fill="#f4f2ee"/><rect x="470" y="360" width="120" height="28" rx="6"/>`,
+  "claw-hammer": `<rect x="220" y="360" width="280" height="50" rx="8"/><rect x="470" y="280" width="70" height="200" rx="8"/>`,
 };
+
+const departmentColors: Record<string, string> = {
+  electronics: "#d7e4f5",
+  "home-kitchen": "#f7d9c4",
+  clothing: "#efe3c2",
+  beauty: "#f3d5df",
+  sports: "#dcead8",
+  "books-stationery": "#e6e0f4",
+  toys: "#f6e7c1",
+  travel: "#d5ebe8",
+  tools: "#f0ddd2",
+};
+
+function departmentSvg(slug: string) {
+  const fill = departmentColors[slug] ?? "#f4f2ee";
+  const mark = shapes[catalogProducts.find((product) => product.category === slug)?.slug ?? "usb-c-65w-charger"];
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="600" viewBox="0 0 1000 600">
+  <rect width="1000" height="600" fill="${fill}"/>
+  <g transform="translate(100, -80)" fill="#1c1c1c" fill-opacity="0.85" stroke="#1c1c1c" stroke-width="8" stroke-linejoin="round">
+    ${mark}
+  </g>
+</svg>`;
+}
 
 async function main() {
   const outDir = path.join(process.cwd(), "public", "products");
@@ -80,7 +128,15 @@ async function main() {
     await writeFile(file, buffer);
   }
 
-  console.log(`Wrote ${catalogProducts.length} images to ${outDir}`);
+  const departmentDir = path.join(process.cwd(), "public", "departments");
+  await mkdir(departmentDir, { recursive: true });
+  for (const category of catalogCategories) {
+    const file = path.join(departmentDir, `${category.slug}.webp`);
+    const buffer = await sharp(Buffer.from(departmentSvg(category.slug))).webp({ quality: 82 }).toBuffer();
+    await writeFile(file, buffer);
+  }
+
+  console.log(`Wrote ${catalogProducts.length} product images and ${catalogCategories.length} department images`);
 }
 
 main().catch((error: unknown) => {

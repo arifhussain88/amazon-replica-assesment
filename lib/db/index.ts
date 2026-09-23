@@ -7,18 +7,21 @@ import { drizzle as drizzlePglite, type PgliteDatabase } from "drizzle-orm/pglit
 import { PGlite } from "@electric-sql/pglite";
 import * as schema from "@/lib/db/schema";
 import { SCHEMA_VERSION, createStatements, dropStatements } from "@/lib/db/sql";
-import { seedIfEmpty } from "@/lib/db/seed";
+import { syncCatalog } from "@/lib/db/seed";
 
 export type AppDb = PgliteDatabase<typeof schema>;
 
 const globalForDb = globalThis as unknown as {
   northlineDb?: Promise<AppDb>;
+  northlineSchema?: number;
 };
 
 export function getDb() {
-  if (!globalForDb.northlineDb) {
+  if (!globalForDb.northlineDb || globalForDb.northlineSchema !== SCHEMA_VERSION) {
+    globalForDb.northlineSchema = SCHEMA_VERSION;
     globalForDb.northlineDb = openDatabase().catch((error: unknown) => {
       globalForDb.northlineDb = undefined;
+      globalForDb.northlineSchema = undefined;
       throw error;
     });
   }
@@ -71,7 +74,7 @@ async function prepare(db: AppDb, remote: boolean) {
     );
   }
 
-  await seedIfEmpty(db);
+  await syncCatalog(db);
 }
 
 async function readVersion(db: AppDb) {

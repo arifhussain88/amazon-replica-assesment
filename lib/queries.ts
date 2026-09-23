@@ -144,6 +144,7 @@ export async function getOrderForViewer(orderNumber: string, email?: string | nu
   const items = await db.select().from(orderItems).where(eq(orderItems.orderId, order.id));
   const record: OrderRecord = {
     orderNumber: order.orderNumber,
+    userId: order.userId,
     email: order.email,
     fullName: order.fullName,
     line1: order.line1,
@@ -165,6 +166,17 @@ export async function getOrderForViewer(orderNumber: string, email?: string | nu
     })),
   };
   return record;
+}
+
+export async function listOrdersForUser(userId: string) {
+  const db = await getDb();
+  const rows = await db.select().from(orders).where(eq(orders.userId, userId)).orderBy(desc(orders.createdAt));
+  return rows.map((order) => ({
+    orderNumber: order.orderNumber,
+    createdAt: order.createdAt.toISOString(),
+    totalCents: order.totalCents,
+    status: order.status,
+  }));
 }
 
 async function hydrateCards(

@@ -1,3 +1,5 @@
+import { extraProducts } from "@/lib/catalog-more";
+
 export type CatalogCategory = {
   slug: string;
   name: string;
@@ -1079,6 +1081,7 @@ export const catalogProducts: CatalogProduct[] = [
     ],
     createdAt: "2026-06-19",
   },
+  ...extraProducts,
 ];
 
 export function variantLabel(optionName: string, optionValue: string) {

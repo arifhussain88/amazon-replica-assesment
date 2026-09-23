@@ -1,13 +1,17 @@
 import { z } from "zod";
 
-export const checkoutSchema = z.object({
-  email: z.string().trim().email("Enter a valid email."),
+export const addressSchema = z.object({
   fullName: z.string().trim().min(2, "Enter the recipient name."),
   line1: z.string().trim().min(4, "Enter a street address."),
   city: z.string().trim().min(2, "Enter a city."),
   region: z.string().trim().min(2, "Enter a state or region."),
   postalCode: z.string().trim().min(3, "Enter a postal code.").max(12),
   country: z.enum(["United States", "Canada", "United Kingdom"]),
+});
+
+export type AddressInput = z.infer<typeof addressSchema>;
+
+export const paymentSchema = z.object({
   cardName: z.string().trim().min(2, "Enter the name on the card."),
   cardNumber: z.string().trim().min(1, "Enter a card number."),
   expiry: z.string().trim().min(1, "Enter an expiration date."),

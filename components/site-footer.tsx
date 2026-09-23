@@ -29,7 +29,7 @@ export async function SiteFooter() {
             </li>
             <li>
               <Link href="/orders" className="hover:underline">
-                Find an order
+                Order history
               </Link>
             </li>
             <li>
@@ -42,7 +42,7 @@ export async function SiteFooter() {
         <div>
           <p className="font-semibold text-white">{STORE_NAME}</p>
           <p className="mt-3 leading-6 text-neutral-300">
-            A guest shop for everyday goods. Prices are in US dollars. Payments are checked and not charged.
+            Everyday goods with a signed-in checkout. Prices are in US dollars. Payments are checked and not charged.
           </p>
           <p className="mt-4 text-neutral-400">English · USD · United States</p>
         </div>

@@ -1,8 +1,10 @@
-export const SCHEMA_VERSION = 1;
+export const SCHEMA_VERSION = 3;
 
 export const dropStatements = [
+  "DROP TABLE IF EXISTS sessions CASCADE",
   "DROP TABLE IF EXISTS order_items CASCADE",
   "DROP TABLE IF EXISTS orders CASCADE",
+  "DROP TABLE IF EXISTS users CASCADE",
   "DROP TABLE IF EXISTS cart_items CASCADE",
   "DROP TABLE IF EXISTS carts CASCADE",
   "DROP TABLE IF EXISTS reviews CASCADE",
@@ -67,6 +69,18 @@ export const createStatements = [
     body text NOT NULL,
     created_at timestamptz NOT NULL
   )`,
+  `CREATE TABLE IF NOT EXISTS users (
+    id text PRIMARY KEY,
+    name text NOT NULL,
+    email text NOT NULL UNIQUE,
+    password_hash text NOT NULL,
+    created_at timestamptz NOT NULL
+  )`,
+  `CREATE TABLE IF NOT EXISTS sessions (
+    id text PRIMARY KEY,
+    user_id text NOT NULL REFERENCES users(id),
+    expires_at timestamptz NOT NULL
+  )`,
   `CREATE TABLE IF NOT EXISTS carts (
     id text PRIMARY KEY,
     created_at timestamptz NOT NULL
@@ -105,4 +119,5 @@ export const createStatements = [
     unit_price_cents integer NOT NULL,
     quantity integer NOT NULL
   )`,
+  "ALTER TABLE orders ADD COLUMN IF NOT EXISTS user_id text",
 ];

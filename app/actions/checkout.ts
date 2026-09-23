@@ -3,32 +3,50 @@
 import { and, eq, gte, sql } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { getCurrentUser } from "@/lib/auth";
 import { readCartId, rememberOrder } from "@/lib/cart";
+import { clearDeliveryDraft, readDeliveryDraft, saveDeliveryDraft } from "@/lib/checkout-draft";
 import { getDb } from "@/lib/db";
 import { cartItems, orderItems, orders, productVariants, products } from "@/lib/db/schema";
 import { shippingCents } from "@/lib/store";
-import { cardError, checkoutSchema } from "@/lib/validators";
+import { addressSchema, cardError, paymentSchema } from "@/lib/validators";
 
 export type CheckoutState = {
   error?: string;
 };
 
-export async function placeOrder(_prev: CheckoutState, formData: FormData): Promise<CheckoutState> {
-  const parsed = checkoutSchema.safeParse({
-    email: formData.get("email"),
+export async function saveDelivery(_prev: CheckoutState, formData: FormData): Promise<CheckoutState> {
+  const user = await getCurrentUser();
+  if (!user) return { error: "Sign in before checkout." };
+  const parsed = addressSchema.safeParse({
     fullName: formData.get("fullName"),
     line1: formData.get("line1"),
     city: formData.get("city"),
     region: formData.get("region"),
     postalCode: formData.get("postalCode"),
     country: formData.get("country"),
+  });
+  if (!parsed.success) {
+    return { error: parsed.error.issues[0]?.message ?? "Check the address and try again." };
+  }
+  await saveDeliveryDraft(parsed.data);
+  redirect("/checkout/payment");
+}
+
+export async function placeOrder(_prev: CheckoutState, formData: FormData): Promise<CheckoutState> {
+  const user = await getCurrentUser();
+  if (!user) return { error: "Sign in before checkout." };
+  const address = await readDeliveryDraft();
+  if (!address) return { error: "Enter a delivery address first." };
+
+  const parsed = paymentSchema.safeParse({
     cardName: formData.get("cardName"),
     cardNumber: formData.get("cardNumber"),
     expiry: formData.get("expiry"),
     cvc: formData.get("cvc"),
   });
   if (!parsed.success) {
-    return { error: parsed.error.issues[0]?.message ?? "Check the form and try again." };
+    return { error: parsed.error.issues[0]?.message ?? "Check the card and try again." };
   }
 
   const paymentError = cardError(parsed.data);
@@ -93,13 +111,14 @@ export async function placeOrder(_prev: CheckoutState, formData: FormData): Prom
       await tx.insert(orders).values({
         id: orderId,
         orderNumber: number,
-        email: parsed.data.email.toLowerCase(),
-        fullName: parsed.data.fullName,
-        line1: parsed.data.line1,
-        city: parsed.data.city,
-        region: parsed.data.region,
-        postalCode: parsed.data.postalCode,
-        country: parsed.data.country,
+        userId: user.id,
+        email: user.email,
+        fullName: address.fullName,
+        line1: address.line1,
+        city: address.city,
+        region: address.region,
+        postalCode: address.postalCode,
+        country: address.country,
         subtotalCents: subtotal,
         shippingCents: shipping,
         totalCents: subtotal + shipping,
@@ -126,6 +145,7 @@ export async function placeOrder(_prev: CheckoutState, formData: FormData): Prom
   }
 
   await rememberOrder(orderNumber);
+  await clearDeliveryDraft();
   revalidatePath("/", "layout");
   redirect(`/orders/${orderNumber}`);
 }

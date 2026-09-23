@@ -62,6 +62,22 @@ export const reviews = pgTable("reviews", {
   createdAt: timestamp("created_at", { withTimezone: true }).notNull(),
 });
 
+export const users = pgTable("users", {
+  id: text("id").primaryKey(),
+  name: text("name").notNull(),
+  email: text("email").notNull().unique(),
+  passwordHash: text("password_hash").notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true }).notNull(),
+});
+
+export const sessions = pgTable("sessions", {
+  id: text("id").primaryKey(),
+  userId: text("user_id")
+    .notNull()
+    .references(() => users.id),
+  expiresAt: timestamp("expires_at", { withTimezone: true }).notNull(),
+});
+
 export const carts = pgTable("carts", {
   id: text("id").primaryKey(),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull(),
@@ -83,6 +99,7 @@ export const cartItems = pgTable("cart_items", {
 export const orders = pgTable("orders", {
   id: text("id").primaryKey(),
   orderNumber: text("order_number").notNull().unique(),
+  userId: text("user_id"),
   email: text("email").notNull(),
   fullName: text("full_name").notNull(),
   line1: text("line1").notNull(),

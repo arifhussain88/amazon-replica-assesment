@@ -1,7 +1,7 @@
 import Link from "next/link";
+import { CardAddButton } from "@/components/card-add-button";
 import { PriceTag } from "@/components/price-tag";
 import { ProductImage } from "@/components/product-image";
-import { QuickView } from "@/components/quick-view";
 import { StarRating } from "@/components/star-rating";
 import type { ProductCard as ProductCardData } from "@/lib/types";
 
@@ -22,7 +22,7 @@ export function ProductCard({ product }: { product: ProductCardData }) {
         <PriceTag priceCents={product.priceCents} compareAtPriceCents={product.compareAtPriceCents} variants={product.variants} />
       </div>
       <div className="mt-3">
-        <QuickView product={product} />
+        <CardAddButton productId={product.id} stock={product.stock} variants={product.variants} />
       </div>
     </article>
   );
