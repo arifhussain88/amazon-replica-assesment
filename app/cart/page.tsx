@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { removeCartItem, updateCartItem } from "@/app/actions/cart";
+import { CartLineControls } from "@/components/cart-line-controls";
 import { ProductImage } from "@/components/product-image";
 import { Button } from "@/components/ui/button";
 import { readCart } from "@/lib/cart";
@@ -33,28 +33,7 @@ export default async function CartPage() {
                   </Link>
                   {line.variantLabel ? <p className="text-sm text-neutral-600">{line.variantLabel}</p> : null}
                   <p className="mt-1 text-sm font-semibold">{formatMoney(line.unitPriceCents)}</p>
-                  <div className="mt-2 flex flex-wrap items-center gap-3">
-                    <form action={updateCartItem} className="flex items-center gap-2 text-sm">
-                      <input type="hidden" name="itemId" value={line.id} />
-                      <label htmlFor={`qty-${line.id}`}>Qty</label>
-                      <select id={`qty-${line.id}`} name="quantity" defaultValue={line.quantity} className="h-9 rounded-md border border-[#888] bg-white px-2">
-                        {Array.from({ length: Math.max(line.quantity, Math.min(line.stock, 20)) }, (_, index) => (
-                          <option key={index + 1} value={index + 1}>
-                            {index + 1}
-                          </option>
-                        ))}
-                      </select>
-                      <button type="submit" className="text-[#1a5276]">
-                        Update
-                      </button>
-                    </form>
-                    <form action={removeCartItem}>
-                      <input type="hidden" name="itemId" value={line.id} />
-                      <button type="submit" className="text-sm text-[#1a5276]">
-                        Delete
-                      </button>
-                    </form>
-                  </div>
+                  <CartLineControls itemId={line.id} quantity={line.quantity} stock={line.stock} />
                 </div>
               </li>
             ))}

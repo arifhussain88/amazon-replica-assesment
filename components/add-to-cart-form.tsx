@@ -1,14 +1,18 @@
 "use client";
 
-import { useActionState, useEffect, useState } from "react";
+import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
-import { addToCart, type CartActionState } from "@/app/actions/cart";
 import { Button } from "@/components/ui/button";
 import { PriceTag } from "@/components/price-tag";
 import { stockFor } from "@/lib/pricing";
 import type { VariantChoice } from "@/lib/types";
 
-const initial: CartActionState = {};
+type CartFormState = {
+  ok?: boolean;
+  error?: string;
+};
+
+const initial: CartFormState = {};
 
 export function AddToCartForm({
   productId,
@@ -28,7 +32,8 @@ export function AddToCartForm({
   onAdded?: () => void;
 }) {
   const router = useRouter();
-  const [state, action, pending] = useActionState(addToCart, initial);
+  const [state, setState] = useState(initial);
+  const [pending, setPending] = useState(false);
   const [variantId, setVariantId] = useState(variants.find((variant) => variant.stock > 0)?.id ?? variants[0]?.id ?? "");
   const [quantity, setQuantity] = useState(1);
   const selected = variants.find((variant) => variant.id === variantId);
@@ -36,15 +41,34 @@ export function AddToCartForm({
   const selectedPrice = selected?.priceCents ?? priceCents;
   const optionName = variants[0]?.optionName;
 
-  useEffect(() => {
-    if (state.ok) {
+  async function onSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (pending) return;
+    setPending(true);
+    setState({});
+    try {
+      const response = await fetch("/api/cart", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ productId, variantId, quantity }),
+      });
+      const data: unknown = await response.json();
+      if (!response.ok) {
+        setState({ error: messageFrom(data, "Could not add to cart.") });
+        return;
+      }
+      setState({ ok: true });
       router.refresh();
       onAdded?.();
+    } catch {
+      setState({ error: "Could not add to cart." });
+    } finally {
+      setPending(false);
     }
-  }, [state.ok, router, onAdded]);
+  }
 
   return (
-    <form action={action} className="space-y-3">
+    <form onSubmit={onSubmit} className="space-y-3">
       <input type="hidden" name="productId" value={productId} />
       <input type="hidden" name="variantId" value={variantId} />
       <PriceTag
@@ -101,4 +125,9 @@ export function AddToCartForm({
       </Button>
     </form>
   );
+}
+
+function messageFrom(data: unknown, fallback: string) {
+  if (data && typeof data === "object" && "message" in data && typeof data.message === "string") return data.message;
+  return fallback;
 }

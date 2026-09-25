@@ -1,12 +1,16 @@
 "use client";
 
-import { useActionState, useEffect, useState } from "react";
+import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
-import { addToCart, type CartActionState } from "@/app/actions/cart";
 import { Button } from "@/components/ui/button";
 import type { VariantChoice } from "@/lib/types";
 
-const initial: CartActionState = {};
+type CartFormState = {
+  ok?: boolean;
+  error?: string;
+};
+
+const initial: CartFormState = {};
 
 export function CardAddButton({
   productId,
@@ -18,18 +22,40 @@ export function CardAddButton({
   variants: VariantChoice[];
 }) {
   const router = useRouter();
-  const [state, action, pending] = useActionState(addToCart, initial);
+  const [state, setState] = useState(initial);
+  const [pending, setPending] = useState(false);
   const availableVariants = variants.filter((variant) => variant.stock > 0);
   const [variantId, setVariantId] = useState(availableVariants[0]?.id ?? variants[0]?.id ?? "");
   const selected = variants.find((variant) => variant.id === variantId);
   const available = variants.length > 0 ? (selected?.stock ?? 0) : stock;
 
-  useEffect(() => {
-    if (state.ok) router.refresh();
-  }, [state.ok, router]);
+  async function onSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (pending) return;
+    setPending(true);
+    setState({});
+    try {
+      const response = await fetch("/api/cart", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ productId, variantId, quantity: 1 }),
+      });
+      const data: unknown = await response.json();
+      if (!response.ok) {
+        setState({ error: messageFrom(data, "Could not add to cart.") });
+        return;
+      }
+      setState({ ok: true });
+      router.refresh();
+    } catch {
+      setState({ error: "Could not add to cart." });
+    } finally {
+      setPending(false);
+    }
+  }
 
   return (
-    <form action={action} className="mt-auto space-y-2">
+    <form onSubmit={onSubmit} className="mt-auto space-y-2">
       <input type="hidden" name="productId" value={productId} />
       <input type="hidden" name="variantId" value={variantId} />
       <input type="hidden" name="quantity" value="1" />
@@ -59,4 +85,9 @@ export function CardAddButton({
       </Button>
     </form>
   );
+}
+
+function messageFrom(data: unknown, fallback: string) {
+  if (data && typeof data === "object" && "message" in data && typeof data.message === "string") return data.message;
+  return fallback;
 }
