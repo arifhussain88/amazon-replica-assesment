@@ -3,8 +3,10 @@
 import { useActionState, type ComponentProps } from "react";
 import { register, signIn, type AuthState } from "@/app/actions/auth";
 import { Button } from "@/components/ui/button";
+import { cardSurface } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { cn } from "@/lib/utils";
 
 const initial: AuthState = {};
 
@@ -14,7 +16,7 @@ export function AccountForms({ nextPath }: { nextPath: string }) {
 
   return (
     <div className="grid gap-6 lg:grid-cols-2">
-      <form action={signInAction} className="space-y-3 rounded-md border border-[#e3e6e6] bg-white p-5">
+      <form action={signInAction} className={cn(cardSurface, "space-y-3 p-5")}>
         <h2 className="text-lg font-semibold">Sign in</h2>
         <input type="hidden" name="next" value={nextPath} />
         <Field label="Email" name="email" idPrefix="sign-in" type="email" autoComplete="email" />
@@ -24,13 +26,13 @@ export function AccountForms({ nextPath }: { nextPath: string }) {
           {signingIn ? "Signing in..." : "Sign in"}
         </Button>
       </form>
-      <form action={registerAction} className="space-y-3 rounded-md border border-[#e3e6e6] bg-white p-5">
+      <form action={registerAction} className={cn(cardSurface, "space-y-3 p-5")}>
         <h2 className="text-lg font-semibold">Create account</h2>
         <input type="hidden" name="next" value={nextPath} />
         <Field label="Name" name="name" idPrefix="register" autoComplete="name" />
         <Field label="Email" name="email" idPrefix="register" type="email" autoComplete="email" />
         <Field label="Password" name="password" idPrefix="register" type="password" autoComplete="new-password" />
-        <p className="text-xs text-neutral-600">At least 8 characters. This stays on this shop only.</p>
+        <p className="text-xs text-muted-foreground">At least 8 characters. This stays on this shop only.</p>
         {registerState.error ? <p className="text-sm text-[#b12704]">{registerState.error}</p> : null}
         <Button type="submit" variant="ink" className="w-full" disabled={registering}>
           {registering ? "Creating account..." : "Create account"}

@@ -8,7 +8,7 @@ export function Checkbox({ className, ...props }: React.ComponentProps<typeof Ch
   return (
     <CheckboxPrimitive.Root
       className={cn(
-        "flex size-4 shrink-0 items-center justify-center rounded-sm border border-[#888] bg-white data-[state=checked]:border-[#131921] data-[state=checked]:bg-[#131921]",
+        "flex size-4 shrink-0 items-center justify-center rounded-sm border border-border bg-card data-[state=checked]:border-primary data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground",
         className,
       )}
       {...props}

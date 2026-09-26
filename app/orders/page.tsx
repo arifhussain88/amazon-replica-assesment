@@ -3,9 +3,11 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { signOut } from "@/app/actions/auth";
 import { Button } from "@/components/ui/button";
+import { cardSurface } from "@/components/ui/card";
 import { getCurrentUser } from "@/lib/auth";
 import { formatMoney } from "@/lib/money";
 import { listOrdersForUser } from "@/lib/queries";
+import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = { title: "Your orders" };
 
@@ -19,7 +21,7 @@ export default async function OrdersPage() {
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
           <h1 className="text-2xl font-semibold">Your orders</h1>
-          <p className="mt-1 text-sm text-neutral-600">{user.email}</p>
+          <p className="mt-1 text-sm text-muted-foreground">{user.email}</p>
         </div>
         <form action={signOut}>
           <Button type="submit" variant="outline">
@@ -28,18 +30,18 @@ export default async function OrdersPage() {
         </form>
       </div>
       {orders.length === 0 ? (
-        <p className="rounded-md bg-white p-5 text-sm">
-          No orders yet. <Link href="/search" className="text-[#1a5276]">Start shopping</Link>
+        <p className={cn(cardSurface, "p-5 text-sm")}>
+          No orders yet. <Link href="/search" className="text-primary">Start shopping</Link>
         </p>
       ) : (
-        <ul className="divide-y divide-[#e3e6e6] rounded-md border border-[#e3e6e6] bg-white">
+        <ul className={cn(cardSurface, "divide-y divide-border")}>
           {orders.map((order) => (
             <li key={order.orderNumber} className="flex flex-wrap items-center justify-between gap-3 p-4 text-sm">
               <div>
-                <Link href={`/orders/${order.orderNumber}`} className="font-semibold text-[#1a5276]">
+                <Link href={`/orders/${order.orderNumber}`} className="font-semibold text-primary">
                   {order.orderNumber}
                 </Link>
-                <p className="text-neutral-600">
+                <p className="text-muted-foreground">
                   {new Intl.DateTimeFormat("en-US", { dateStyle: "medium" }).format(new Date(order.createdAt))} · {order.status}
                 </p>
               </div>

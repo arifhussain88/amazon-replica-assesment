@@ -3,7 +3,9 @@ import Link from "next/link";
 import { signOut } from "@/app/actions/auth";
 import { AccountForms } from "@/components/account-forms";
 import { Button } from "@/components/ui/button";
+import { cardSurface } from "@/components/ui/card";
 import { getCurrentUser, safeNextPath } from "@/lib/auth";
+import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = { title: "Account" };
 
@@ -18,9 +20,9 @@ export default async function AccountPage({
 
   if (user) {
     return (
-      <div className="max-w-lg space-y-4 rounded-md bg-white p-5">
+      <div className={cn(cardSurface, "max-w-lg space-y-4 p-5")}>
         <h1 className="text-2xl font-semibold">Hello, {user.name.split(" ")[0]}</h1>
-        <p className="text-sm text-neutral-600">Signed in as {user.email}</p>
+        <p className="text-sm text-muted-foreground">Signed in as {user.email}</p>
         <div className="flex flex-wrap gap-3">
           <Button asChild>
             <Link href="/orders">Order history</Link>
@@ -39,7 +41,7 @@ export default async function AccountPage({
     <div className="space-y-4">
       <div>
         <h1 className="text-2xl font-semibold">Your account</h1>
-        <p className="mt-1 text-sm text-neutral-600">Sign in to check out and see your orders.</p>
+        <p className="mt-1 text-sm text-muted-foreground">Sign in to check out and see your orders.</p>
       </div>
       <AccountForms nextPath={nextPath} />
     </div>

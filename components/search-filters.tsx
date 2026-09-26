@@ -52,7 +52,7 @@ export function SearchFilters({
             inputMode="decimal"
             defaultValue={filters.minDollars ?? ""}
             placeholder="Min"
-            className="h-9 w-20 rounded-md border border-[#888] px-2"
+            className="h-9 w-20 rounded-lg border border-input bg-card px-2 text-foreground shadow-sm"
           />
           <span>to</span>
           <input
@@ -60,7 +60,7 @@ export function SearchFilters({
             inputMode="decimal"
             defaultValue={filters.maxDollars ?? ""}
             placeholder="Max"
-            className="h-9 w-20 rounded-md border border-[#888] px-2"
+            className="h-9 w-20 rounded-lg border border-input bg-card px-2 text-foreground shadow-sm"
           />
         </div>
       </fieldset>
@@ -75,7 +75,7 @@ export function SearchFilters({
           ))}
         </div>
       </fieldset>
-      <button type="submit" className="h-9 rounded-md bg-[#f5b942] px-3 font-medium text-[#111]">
+      <button type="submit" className="h-9 rounded-lg bg-accent px-3 font-medium text-accent-foreground hover:bg-accent-hover">
         Apply
       </button>
     </form>
@@ -84,7 +84,7 @@ export function SearchFilters({
 
 function FilterLink({ href, active, children }: { href: string; active: boolean; children: ReactNode }) {
   return (
-    <a href={href} className={`block rounded px-1 py-1 ${active ? "font-semibold text-[#111]" : "text-[#1a5276]"}`}>
+    <a href={href} className={`block rounded-lg px-2 py-1 ${active ? "bg-accent font-semibold text-accent-foreground" : "text-primary"}`}>
       {children}
     </a>
   );
@@ -107,7 +107,7 @@ export function SortSelect({ filters }: { filters: SearchFilters }) {
         name="sort"
         defaultValue={filters.sort}
         onChange={(event) => event.currentTarget.form?.requestSubmit()}
-        className="h-9 rounded-md border border-[#888] bg-white px-2"
+        className="h-9 rounded-lg border border-input bg-card px-2 text-foreground shadow-sm"
       >
         <option value="featured">Featured</option>
         <option value="price-asc">Price: Low to high</option>

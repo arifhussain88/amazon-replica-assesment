@@ -22,13 +22,13 @@ export function QuickView({ product }: { product: ProductCard }) {
 
   const body = (
     <div className="grid gap-4 sm:grid-cols-[180px_1fr]">
-      <ProductImage src={product.imageUrl} alt={product.imageAlt} />
+      <ProductImage src={product.imageUrl} alt={product.imageAlt} frameClassName="shadow-sm" />
       <div className="space-y-3">
-        <p className="text-sm text-neutral-600">{product.brand}</p>
-        <h2 className="text-lg font-semibold leading-snug">{product.name}</h2>
+        <p className="text-sm text-muted-foreground">{product.brand}</p>
+        <h2 className="font-sans text-lg font-semibold leading-snug text-foreground">{product.name}</h2>
         <StarRating ratingTimes10={product.ratingTimes10} count={product.ratingCount} />
-        <p className="text-sm leading-6 text-neutral-700">{product.shortDescription}</p>
-        <ul className="list-disc space-y-1 pl-5 text-sm text-neutral-700">
+        <p className="text-sm leading-6 text-muted-foreground">{product.shortDescription}</p>
+        <ul className="list-disc space-y-1 pl-5 text-sm text-foreground">
           {product.features.slice(0, 3).map((feature) => (
             <li key={feature}>{feature}</li>
           ))}
@@ -47,7 +47,10 @@ export function QuickView({ product }: { product: ProductCard }) {
   );
 
   const trigger = (
-    <button type="button" className="mt-auto w-full rounded-md border border-[#d5d9d9] bg-white px-3 py-2 text-sm hover:bg-neutral-50">
+    <button
+      type="button"
+      className="w-full cursor-pointer rounded-lg border border-border bg-card px-3 py-2 text-sm font-medium text-foreground shadow-sm transition-shadow duration-200 ease-out hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+    >
       Quick view
     </button>
   );
@@ -56,7 +59,9 @@ export function QuickView({ product }: { product: ProductCard }) {
     return (
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>{trigger}</DialogTrigger>
-        <DialogContent title="Quick view">{body}</DialogContent>
+        <DialogContent title="Quick view" className="rounded-lg bg-card shadow-md">
+          {body}
+        </DialogContent>
       </Dialog>
     );
   }
@@ -64,7 +69,7 @@ export function QuickView({ product }: { product: ProductCard }) {
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>{trigger}</SheetTrigger>
-      <SheetContent side="bottom" title="Quick view">
+      <SheetContent side="bottom" title="Quick view" className="rounded-t-lg bg-card shadow-md">
         {body}
       </SheetContent>
     </Sheet>

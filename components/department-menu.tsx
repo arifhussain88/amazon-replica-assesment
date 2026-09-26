@@ -11,7 +11,7 @@ export function DepartmentMenu({
 }) {
   return (
     <Sheet>
-      <SheetTrigger className="inline-flex items-center gap-2 rounded-md px-2 py-1 text-sm font-semibold text-white hover:outline hover:outline-white">
+      <SheetTrigger className="inline-flex items-center gap-2 rounded-md px-2 py-1 text-sm font-semibold text-primary-foreground hover:outline hover:outline-primary-foreground">
         <Menu className="size-5" />
         All
       </SheetTrigger>
@@ -19,7 +19,7 @@ export function DepartmentMenu({
         <ul className="space-y-1">
           <li>
             <SheetClose asChild>
-              <Link href="/search" className="block rounded-md px-2 py-2 hover:bg-neutral-100">
+              <Link href="/search" className="block rounded-md px-2 py-2 hover:bg-secondary">
                 All products
               </Link>
             </SheetClose>
@@ -27,7 +27,7 @@ export function DepartmentMenu({
           {categories.map((category) => (
             <li key={category.slug}>
               <SheetClose asChild>
-                <Link href={`/search?category=${category.slug}`} className="block rounded-md px-2 py-2 hover:bg-neutral-100">
+                <Link href={`/search?category=${category.slug}`} className="block rounded-md px-2 py-2 hover:bg-secondary">
                   {category.name}
                 </Link>
               </SheetClose>

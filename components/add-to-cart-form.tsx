@@ -1,14 +1,18 @@
 "use client";
 
-import { useActionState, useEffect, useState } from "react";
+import { useState, type FormEvent } from "react";
 import { useRouter } from "next/navigation";
-import { addToCart, type CartActionState } from "@/app/actions/cart";
 import { Button } from "@/components/ui/button";
 import { PriceTag } from "@/components/price-tag";
 import { stockFor } from "@/lib/pricing";
 import type { VariantChoice } from "@/lib/types";
 
-const initial: CartActionState = {};
+type CartFormState = {
+  ok?: boolean;
+  error?: string;
+};
+
+const initial: CartFormState = {};
 
 export function AddToCartForm({
   productId,
@@ -28,7 +32,8 @@ export function AddToCartForm({
   onAdded?: () => void;
 }) {
   const router = useRouter();
-  const [state, action, pending] = useActionState(addToCart, initial);
+  const [state, setState] = useState(initial);
+  const [pending, setPending] = useState(false);
   const [variantId, setVariantId] = useState(variants.find((variant) => variant.stock > 0)?.id ?? variants[0]?.id ?? "");
   const [quantity, setQuantity] = useState(1);
   const selected = variants.find((variant) => variant.id === variantId);
@@ -36,15 +41,34 @@ export function AddToCartForm({
   const selectedPrice = selected?.priceCents ?? priceCents;
   const optionName = variants[0]?.optionName;
 
-  useEffect(() => {
-    if (state.ok) {
+  async function onSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (pending) return;
+    setPending(true);
+    setState({});
+    try {
+      const response = await fetch("/api/cart", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ productId, variantId, quantity }),
+      });
+      const data: unknown = await response.json();
+      if (!response.ok) {
+        setState({ error: messageFrom(data, "Could not add to cart.") });
+        return;
+      }
+      setState({ ok: true });
       router.refresh();
       onAdded?.();
+    } catch {
+      setState({ error: "Could not add to cart." });
+    } finally {
+      setPending(false);
     }
-  }, [state.ok, router, onAdded]);
+  }
 
   return (
-    <form action={action} className="space-y-3">
+    <form onSubmit={onSubmit} className="space-y-3">
       <input type="hidden" name="productId" value={productId} />
       <input type="hidden" name="variantId" value={variantId} />
       <PriceTag
@@ -66,7 +90,7 @@ export function AddToCartForm({
                     type="button"
                     disabled={variant.stock <= 0}
                     onClick={() => setVariantId(variant.id)}
-                    className={`rounded-md border px-3 py-1.5 text-sm disabled:opacity-40 ${active ? "border-[#e77600] ring-2 ring-[#f5b942]" : "border-[#d5d9d9]"}`}
+                    className={`rounded-lg border px-3 py-1.5 text-sm shadow-sm disabled:opacity-40 ${active ? "border-accent bg-accent text-accent-foreground" : "border-border bg-card text-foreground hover:shadow-md"}`}
                   >
                     {variant.optionValue}
                   </button>
@@ -76,7 +100,7 @@ export function AddToCartForm({
           </fieldset>
         ) : null}
       </div>
-      <p className={`text-sm ${available > 0 ? "text-[#067d62]" : "text-[#b12704]"}`}>
+      <p className={`text-sm ${available > 0 ? "text-primary" : "text-destructive"}`}>
         {available > 0 ? (available <= 5 ? `Only ${available} left in stock` : "In stock") : "Out of stock"}
       </p>
       <label className="flex items-center gap-2 text-sm">
@@ -85,7 +109,7 @@ export function AddToCartForm({
           name="quantity"
           value={quantity}
           onChange={(event) => setQuantity(Number(event.target.value))}
-          className="h-10 rounded-md border border-[#888] bg-white px-2"
+          className="h-10 rounded-lg border border-input bg-card px-2 text-foreground shadow-sm"
         >
           {Array.from({ length: Math.max(1, Math.min(available, 20)) }, (_, index) => (
             <option key={index + 1} value={index + 1}>
@@ -94,11 +118,16 @@ export function AddToCartForm({
           ))}
         </select>
       </label>
-      {state.error ? <p className="text-sm text-[#b12704]">{state.error}</p> : null}
-      {state.ok && !compact ? <p className="text-sm text-[#067d62]">Added to cart.</p> : null}
+      {state.error ? <p className="text-sm text-destructive">{state.error}</p> : null}
+      {state.ok && !compact ? <p className="text-sm text-primary">Added to cart.</p> : null}
       <Button type="submit" size={compact ? "default" : "lg"} className="w-full" disabled={pending || available <= 0}>
         {pending ? "Adding..." : "Add to cart"}
       </Button>
     </form>
   );
+}
+
+function messageFrom(data: unknown, fallback: string) {
+  if (data && typeof data === "object" && "message" in data && typeof data.message === "string") return data.message;
+  return fallback;
 }

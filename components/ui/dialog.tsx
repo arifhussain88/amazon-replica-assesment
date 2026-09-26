@@ -23,13 +23,13 @@ export function DialogContent({
       <DialogPrimitive.Overlay className="fixed inset-0 z-50 bg-black/50" />
       <DialogPrimitive.Content
         className={cn(
-          "fixed top-1/2 left-1/2 z-50 max-h-[88vh] w-[min(100%-2rem,40rem)] -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-lg bg-white shadow-xl focus:outline-none",
+          "fixed top-1/2 left-1/2 z-50 max-h-[88vh] w-[min(100%-2rem,40rem)] -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-lg bg-card shadow-md focus:outline-none",
           className,
         )}
       >
-        <div className="flex items-center justify-between border-b border-[#d5d9d9] px-5 py-3">
+        <div className="flex items-center justify-between border-b border-border px-5 py-3">
           <DialogPrimitive.Title className="text-lg font-semibold">{title}</DialogPrimitive.Title>
-          <DialogPrimitive.Close className="rounded-md p-1 hover:bg-neutral-100" aria-label="Close">
+          <DialogPrimitive.Close className="rounded-lg p-1 hover:bg-image" aria-label="Close">
             <X className="size-5" />
           </DialogPrimitive.Close>
         </div>

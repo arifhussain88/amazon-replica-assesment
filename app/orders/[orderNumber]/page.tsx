@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { OrderSummary } from "@/components/order-summary";
+import { cardSurface } from "@/components/ui/card";
 import { getCurrentUser } from "@/lib/auth";
 import { recentOrderNumber } from "@/lib/cart";
 import { getOrderForViewer } from "@/lib/queries";
+import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = { title: "Order" };
 
@@ -18,10 +20,10 @@ export default async function OrderConfirmationPage({ params }: { params: Promis
   const justPlaced = recent === orderNumber;
   if (!order || (!ownsOrder && !justPlaced)) {
     return (
-      <div className="max-w-xl rounded-md bg-white p-5">
+      <div className={cn(cardSurface, "max-w-xl p-5")}>
         <h1 className="text-2xl font-semibold">Order not available</h1>
-        <p className="mt-2 text-sm text-neutral-600">Sign in with the account that placed this order to see it in your history.</p>
-        <Link href="/orders" className="mt-4 inline-block text-sm text-[#1a5276]">
+        <p className="mt-2 text-sm text-muted-foreground">Sign in with the account that placed this order to see it in your history.</p>
+        <Link href="/orders" className="mt-4 inline-block text-sm text-primary">
           Your orders
         </Link>
       </div>
