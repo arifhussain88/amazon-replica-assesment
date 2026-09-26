@@ -36,11 +36,12 @@ export type CatalogProduct = {
   variants?: CatalogVariant[];
   reviews: CatalogReview[];
   createdAt: string;
+  imageFile?: string;
 };
 
 export const catalogCategories: CatalogCategory[] = [
   { slug: "electronics", name: "Electronics", description: "Speakers, chargers, and everyday desk gear." },
-  { slug: "home-kitchen", name: "Home & Kitchen", description: "Cookware, kettles, and bedding for daily use." },
+  { slug: "home-kitchen", name: "Home & Kitchen", description: "Cookware, kettles, and tableware for daily use." },
   { slug: "clothing", name: "Clothing", description: "Knits, trousers, and bags made to be worn often." },
   { slug: "beauty", name: "Beauty", description: "Simple skin and hair tools with short ingredient lists." },
   { slug: "sports", name: "Sports", description: "Mats, bottles, and compact training gear." },
@@ -53,14 +54,15 @@ export const catalogCategories: CatalogCategory[] = [
 export const catalogProducts: CatalogProduct[] = [
   {
     slug: "harbor-compact-speaker",
-    name: "Harbor Compact Bluetooth Speaker",
+    imageFile: "bluetooth-speaker.jpg",
+    name: "Portable Bluetooth Speaker",
     brand: "Lumen Audio",
     category: "electronics",
     priceCents: 4800,
     compareAtPriceCents: 6200,
-    shortDescription: "A palm-sized speaker with a full enough sound for a kitchen or a desk.",
+    shortDescription: "A black portable speaker with a top handle, sized for a desk or a kitchen counter.",
     description:
-      "Harbor is a compact Bluetooth speaker for playlists while you cook, work, or sit outside. The body is sealed against splashes, and the single button layout is easy to find without looking.",
+      "This portable Bluetooth speaker has a fabric grille and a handle across the top. The body is sealed against splashes, and the controls are easy to find without looking. It is meant for a playlist in the kitchen, at a desk, or just outside.",
     features: [
       "About 12 hours of playback at moderate volume",
       "Splash-resistant shell for the sink and the patio",
@@ -99,13 +101,14 @@ export const catalogProducts: CatalogProduct[] = [
   },
   {
     slug: "usb-c-65w-charger",
-    name: "65W USB-C Laptop Charger",
+    imageFile: "usb-c-charger.jpg",
+    name: "65W USB-C Wall Charger",
     brand: "Northline",
     category: "electronics",
     priceCents: 2900,
-    shortDescription: "One compact brick for a laptop, phone, and tablet.",
+    shortDescription: "A white 65W USB-C brick for a phone, tablet, or laptop.",
     description:
-      "This 65W USB-C charger folds flat and replaces the larger brick that came with most ultrabooks. A single port keeps the cable situation simple on a nightstand or in a bag.",
+      "This white 65W USB-C charger is a compact wall brick for a nightstand or a bag. One port keeps the cable situation simple, and the body stays small beside a phone. A charging cable is sold separately.",
     features: [
       "65W USB-C Power Delivery",
       "Folding prongs for a laptop sleeve",
@@ -227,45 +230,46 @@ export const catalogProducts: CatalogProduct[] = [
     createdAt: "2026-05-08",
   },
   {
-    slug: "percale-sheet-set",
-    name: "Washed Percale Sheet Set",
+    slug: "everyday-ceramic-mug",
+    imageFile: "ceramic-mug.jpg",
+    name: "Everyday Ceramic Mug",
     brand: "Hearth & Kiln",
     category: "home-kitchen",
-    priceCents: 5800,
-    shortDescription: "Crisp cotton percale that softens after the first wash.",
+    priceCents: 1800,
+    shortDescription: "A glazed ceramic mug that holds a full cup and sits steady on a table.",
     description:
-      "A three-piece percale set in undyed cotton. The weave stays cool, the fitted sheet has a deep pocket, and the pillowcases close with an envelope hem.",
+      "This ceramic mug has a glossy glaze and a handle sized for one hand. It holds a full cup of coffee or tea and stands steady on a wood table. The foot is left unglazed so it does not slide on a coaster.",
     features: [
-      "100% cotton percale",
-      "Deep pocket fitted sheet",
-      "Envelope pillowcases",
-      "Gets softer after washing",
+      "Glazed ceramic body",
+      "Handle sized for one hand",
+      "Unglazed foot",
+      "Dishwasher safe",
     ],
     specifications: [
-      { label: "Fabric", value: "Cotton percale" },
-      { label: "Thread count", value: "220" },
-      { label: "Pocket", value: "15 inches" },
-      { label: "Includes", value: "Fitted, flat, pillowcases" },
+      { label: "Material", value: "Ceramic" },
+      { label: "Capacity", value: "12 oz" },
+      { label: "Finish", value: "Gloss glaze, unglazed foot" },
+      { label: "Care", value: "Dishwasher safe" },
     ],
     stock: 0,
     variants: [
-      { optionName: "Size", optionValue: "Twin", stock: 8, priceCents: 5800 },
-      { optionName: "Size", optionValue: "Queen", stock: 10, priceCents: 7200 },
-      { optionName: "Size", optionValue: "King", stock: 5, priceCents: 8400 },
+      { optionName: "Color", optionValue: "Ivory", stock: 8, priceCents: 1800 },
+      { optionName: "Color", optionValue: "Stone", stock: 10, priceCents: 1800 },
+      { optionName: "Color", optionValue: "Slate", stock: 5, priceCents: 2200 },
     ],
     reviews: [
       {
         author: "Leah M.",
         rating: 5,
-        title: "Cool through August",
-        body: "The Queen set fits a tall mattress. It came out of the dryer smooth enough to skip ironing. Demo review.",
+        title: "The right size for coffee",
+        body: "The handle fits a full grip. It holds a mug of coffee without feeling oversized. Demo review.",
         createdAt: "2026-07-28",
       },
       {
         author: "Samir D.",
         rating: 4,
         title: "True to the stone color",
-        body: "Not bright white, which is what I wanted. One corner elastic was tight on night one and eased up. Demo review.",
+        body: "Not bright white, which is what I wanted. The foot stays put on a wood table. Demo review.",
         createdAt: "2026-08-21",
       },
     ],
@@ -273,13 +277,14 @@ export const catalogProducts: CatalogProduct[] = [
   },
   {
     slug: "ten-inch-skillet",
-    name: "10-Inch Everyday Skillet",
+    imageFile: "frying-pan.jpg",
+    name: "Everyday Frying Pan",
     brand: "Hearth & Kiln",
     category: "home-kitchen",
-    priceCents: 3600,
-    shortDescription: "A lightweight nonstick skillet for eggs, greens, and one-pan dinners.",
+    priceCents: 3400,
+    shortDescription: "A black frying pan for eggs, greens, and one-pan dinners.",
     description:
-      "This 10-inch skillet is the pan you leave on the front burner. The nonstick coating releases eggs, the handle stays short enough for a crowded stove, and it is oven-safe to 400°F.",
+      "This black frying pan is the one you leave on the front burner. The cooking surface releases eggs, and the handle stays short enough for a crowded stove. It is oven-safe to 400°F.",
     features: [
       "10-inch cooking surface",
       "Nonstick release for eggs",
@@ -313,13 +318,14 @@ export const catalogProducts: CatalogProduct[] = [
   },
   {
     slug: "merino-crewneck",
-    name: "Merino Crewneck Sweater",
+    imageFile: "wool-sweater.jpg",
+    name: "Knit Crewneck Sweater",
     brand: "Fieldwear",
     category: "clothing",
     priceCents: 6800,
-    shortDescription: "A light merino crewneck that layers under a jacket.",
+    shortDescription: "A knit crewneck sweater you can hang between wears.",
     description:
-      "This crewneck is knit from extra-fine merino so it works as a shirt in mild weather and as a layer when the office is cold. The shoulders are set in, and the hem stays put.",
+      "This crewneck is a knit sweater with a ribbed collar, cuffs, and hem. It works as a layer when a room is cold and as a shirt when the weather is mild. The shoulders are set in, and the hem stays put.",
     features: [
       "Extra-fine merino wool",
       "Ribbed collar, cuffs, and hem",
@@ -406,13 +412,14 @@ export const catalogProducts: CatalogProduct[] = [
   },
   {
     slug: "canvas-market-tote",
+    imageFile: "canvas-tote.jpg",
     name: "Canvas Market Tote",
     brand: "Fieldwear",
     category: "clothing",
     priceCents: 2800,
-    shortDescription: "A heavy canvas tote with a flat bottom and an inside pocket.",
+    shortDescription: "A white canvas tote with a flat bottom and an inside pocket.",
     description:
-      "The market tote stands up when you set it down. Canvas is unlined except for a small pocket sized for a phone, and the straps are long enough to sit on a shoulder.",
+      "This market tote is sewn from heavy white canvas and stands up when you set it down. The body is unlined except for a small pocket sized for a phone. The straps are long enough to sit on a shoulder.",
     features: [
       "Heavy cotton canvas",
       "Flat base so it stands",
@@ -451,13 +458,14 @@ export const catalogProducts: CatalogProduct[] = [
   },
   {
     slug: "daily-moisturizer",
-    name: "Daily Face Moisturizer",
+    imageFile: "face-cream.jpg",
+    name: "Daily Face Cream",
     brand: "Bramble",
     category: "beauty",
     priceCents: 1800,
-    shortDescription: "An unscented moisturizer for morning, under sunscreen.",
+    shortDescription: "An unscented cream in an open jar, for morning under sunscreen.",
     description:
-      "A short-list moisturizer with glycerin and shea. It is unscented, absorbs without a film, and comes in two sizes so you can try it before committing to the larger bottle.",
+      "This face cream is an unscented blend of glycerin and shea, packed in a jar. The cream is white, absorbs without a film, and sits under sunscreen. Two jar sizes let you try it before the larger one.",
     features: [
       "Unscented",
       "Glycerin and shea butter",
@@ -480,7 +488,7 @@ export const catalogProducts: CatalogProduct[] = [
         author: "Camille J.",
         rating: 5,
         title: "No scent, no sting",
-        body: "The 50 ml bottle lasted me six weeks of morning use. It does not pill under my sunscreen. Demo review.",
+        body: "The 50 ml jar lasted me six weeks of morning use. It does not pill under my sunscreen. Demo review.",
         createdAt: "2026-07-05",
       },
       {
@@ -535,13 +543,14 @@ export const catalogProducts: CatalogProduct[] = [
   },
   {
     slug: "studio-yoga-mat",
+    imageFile: "yoga-mat.jpg",
     name: "Studio Yoga Mat",
     brand: "Kinfield",
     category: "sports",
-    priceCents: 3400,
-    shortDescription: "A 5mm mat with a textured top that stays put on wood floors.",
+    priceCents: 3800,
+    shortDescription: "A blue 5mm mat with a textured top that stays put on hard floors.",
     description:
-      "This studio mat is thick enough for knees and marked with a center line you can ignore. The closed-cell surface wipes clean, and a carrying strap is included.",
+      "This blue studio mat is thick enough for knees on a hard floor. The textured top stays put through a full stretch, and the closed-cell surface wipes clean. A carrying strap is included.",
     features: [
       "5mm cushion",
       "Textured non-slip top",
@@ -580,13 +589,14 @@ export const catalogProducts: CatalogProduct[] = [
   },
   {
     slug: "insulated-bottle",
-    name: "Insulated Bottle, 20 oz",
+    imageFile: "water-bottle.jpg",
+    name: "Insulated Water Bottle",
     brand: "Kinfield",
     category: "sports",
-    priceCents: 2600,
-    shortDescription: "A narrow bottle that fits a car cup holder and keeps water cold.",
+    priceCents: 2800,
+    shortDescription: "A powder-coated stainless bottle that keeps water cold.",
     description:
-      "Twenty ounces, double-wall stainless, and a spout you can drink from without unscrewing the whole lid. It is sized for a commute, a class, or the sideline.",
+      "This insulated bottle is stainless steel with a powder-coated finish, in the everyday colors you see lined up on a counter. Double walls keep water cold through a commute or a workout. The mouth is wide enough for ice.",
     features: [
       "20 oz double-wall stainless",
       "Cold for about 18 hours",
@@ -705,39 +715,40 @@ export const catalogProducts: CatalogProduct[] = [
   },
   {
     slug: "the-salt-market",
-    name: "The Salt Market",
+    imageFile: "hardcover-book.jpg",
+    name: "Clothbound Hardcover Novel",
     brand: "Paper North",
     category: "books-stationery",
     priceCents: 1800,
-    shortDescription: "A hardcover novel about a coastal town and the shop that keeps its books.",
+    shortDescription: "A clothbound hardcover novel, closed, with no dust jacket.",
     description:
-      "The Salt Market follows a record-keeper in a harbor town as the summer ledger stops adding up. It is a quiet novel about work, weather, and who gets to stay. This edition is hardcover with a sewn binding.",
+      "This is a clothbound hardcover novel, shown closed on a wooden table. The binding is sewn, the pages are cream, and there is no dust jacket. It is the kind of book you leave on a side table between chapters.",
     features: [
-      "Original hardcover novel",
+      "Clothbound hardcover",
       "Sewn binding",
       "320 pages",
-      "Printed for this shop",
+      "No dust jacket",
     ],
     specifications: [
       { label: "Format", value: "Hardcover" },
       { label: "Pages", value: "320" },
       { label: "Language", value: "English" },
-      { label: "Author", value: "A. Pell" },
+      { label: "Cover", value: "Cloth, no jacket" },
     ],
     stock: 17,
     reviews: [
       {
         author: "Dorothy H.",
         rating: 5,
-        title: "Finished it in two nights",
-        body: "The shop scenes are specific enough to smell like paper and salt. I did not want a sequel, which is a compliment. Demo review.",
+        title: "Read it in two sittings",
+        body: "The cloth cover is pleasant to hold. I left it on the table and picked it up again the next night. Demo review.",
         createdAt: "2026-07-25",
       },
       {
         author: "Felix A.",
         rating: 4,
         title: "Slow first chapter",
-        body: "The ledger mystery starts late. Once it does, I kept the book in my bag. Demo review.",
+        body: "The story starts quietly. Once it does, I kept the book in my bag. Demo review.",
         createdAt: "2026-08-20",
       },
     ],
@@ -745,24 +756,25 @@ export const catalogProducts: CatalogProduct[] = [
   },
   {
     slug: "gel-pen-pack",
-    name: "Gel Pen 8-Pack",
+    imageFile: "gel-pens.jpg",
+    name: "Pastel Gel Pen Set",
     brand: "Paper North",
     category: "books-stationery",
     priceCents: 1200,
-    shortDescription: "Eight capped gel pens in muted ink colors.",
+    shortDescription: "Four capped gel pens in soft pastel colors.",
     description:
-      "A tin of eight 0.5 mm gel pens. The inks are black, gray, navy, forest, burgundy, brown, olive, and terracotta. Caps click, and the tips do not blob on the first stroke.",
+      "A set of four pastel gel pens with capped barrels. The inks write smoothly on notebook paper, and the colors stay soft rather than neon. They live in a pencil cup or a bag pocket.",
     features: [
       "0.5 mm gel tips",
-      "Eight muted colors",
-      "Capped, click-free in a pocket",
-      "Refillable barrels",
+      "Four pastel colors",
+      "Capped barrels",
+      "Smooth first stroke",
     ],
     specifications: [
       { label: "Tip", value: "0.5 mm" },
       { label: "Ink", value: "Gel, water-based" },
-      { label: "Count", value: "8" },
-      { label: "Case", value: "Tin" },
+      { label: "Count", value: "4" },
+      { label: "Barrel", value: "Capped" },
     ],
     stock: 36,
     reviews: [
@@ -785,23 +797,24 @@ export const catalogProducts: CatalogProduct[] = [
   },
   {
     slug: "wooden-block-set",
-    name: "Wooden Block Set, 40 Pieces",
+    imageFile: "wooden-toy-robot.jpg",
+    name: "Wooden Toy Robot",
     brand: "Little Yard",
     category: "toys",
-    priceCents: 3200,
-    shortDescription: "Forty smooth beech blocks in a cotton drawstring bag.",
+    priceCents: 2400,
+    shortDescription: "A small wooden robot with eased edges, for a shelf or a table.",
     description:
-      "A set of sanded beech blocks: cubes, arches, columns, and triangles. Edges are eased, paint is water-based on half the pieces, and the bag hangs on a hook.",
+      "This wooden toy robot has a blocky body and rounded edges. The wood is sanded smooth, the colors are muted, and there are no electronic parts. It can sit on a shelf or come apart in quiet play.",
     features: [
-      "40 pieces",
-      "Beech wood, eased edges",
-      "Water-based color on half the set",
-      "Cotton storage bag",
+      "Solid wood body",
+      "Eased edges",
+      "Muted finish",
+      "No electronic parts",
     ],
     specifications: [
-      { label: "Pieces", value: "40" },
-      { label: "Material", value: "Beech" },
-      { label: "Finish", value: "Sanded, water-based paint" },
+      { label: "Material", value: "Wood" },
+      { label: "Finish", value: "Sanded, muted color" },
+      { label: "Parts", value: "No electronics" },
       { label: "Age", value: "3 years and up" },
     ],
     stock: 13,
@@ -809,15 +822,15 @@ export const catalogProducts: CatalogProduct[] = [
       {
         author: "Patricia N.",
         rating: 5,
-        title: "No splinters",
-        body: "I ran a hand over every block. The bag means they leave the living room. Demo review.",
+        title: "Smooth edges",
+        body: "I ran a hand over the wood. Nothing snags, and it sits on a shelf between play. Demo review.",
         createdAt: "2026-07-03",
       },
       {
         author: "Jon K.",
         rating: 4,
-        title: "A good first set",
-        body: "Forty is enough for a bridge and a garage. We will want more only because they get used. Demo review.",
+        title: "A quiet toy",
+        body: "The pieces come apart on the table and go back together without a fight. We keep it out where it can be seen. Demo review.",
         createdAt: "2026-08-15",
       },
     ],
@@ -865,14 +878,15 @@ export const catalogProducts: CatalogProduct[] = [
   },
   {
     slug: "carry-on-spinner",
-    name: "Carry-On Spinner",
+    imageFile: "carry-on-suitcase.jpg",
+    name: "Hard-Shell Carry-On",
     brand: "Wayline",
     category: "travel",
     priceCents: 12800,
     compareAtPriceCents: 16000,
-    shortDescription: "A 21-inch spinner with a front pocket and a packed weight under seven pounds.",
+    shortDescription: "A silver hard-shell spinner sized for an overhead bin.",
     description:
-      "This carry-on is sized for overhead bins on most domestic flights. Four spinner wheels, a locking handle, and a front pocket for a book and a charger. The shell is polycarbonate.",
+      "This hard-shell carry-on is a silver spinner sized for overhead bins on most domestic flights. Four wheels and a telescoping handle make it easy to roll across a tile floor. The shell is polycarbonate and the empty case stays under seven pounds.",
     features: [
       "21-inch overhead size",
       "Four spinner wheels",
@@ -995,17 +1009,18 @@ export const catalogProducts: CatalogProduct[] = [
   },
   {
     slug: "cordless-screwdriver",
-    name: "Cordless Screwdriver",
+    imageFile: "cordless-drill.jpg",
+    name: "Cordless Drill Driver",
     brand: "Benchline",
     category: "tools",
-    priceCents: 3900,
-    shortDescription: "A small USB-C driver for furniture, frames, and outlet plates.",
+    priceCents: 5900,
+    shortDescription: "A black and red cordless drill for furniture, shelves, and household jobs.",
     description:
-      "This cordless screwdriver is for household assembly, not for deck framing. A forward and reverse switch, a light at the tip, and USB-C charging. Buy the tool alone or with a 32-piece bit set.",
+      "This cordless drill driver has a black and red body and a pistol grip you can hold overhead. The chuck takes standard hex bits, and the tool is light enough for furniture and shelves. It is not meant for concrete or deck framing.",
     features: [
-      "USB-C charging",
+      "Pistol grip",
       "Forward and reverse",
-      "LED at the tip",
+      "1/4 inch hex chuck",
       "Optional 32-piece bit set",
     ],
     specifications: [
@@ -1016,8 +1031,8 @@ export const catalogProducts: CatalogProduct[] = [
     ],
     stock: 0,
     variants: [
-      { optionName: "Configuration", optionValue: "Tool only", stock: 12, priceCents: 3900 },
-      { optionName: "Configuration", optionValue: "Tool + 32-bit set", stock: 8, priceCents: 5400 },
+      { optionName: "Configuration", optionValue: "Tool only", stock: 12, priceCents: 5900 },
+      { optionName: "Configuration", optionValue: "Tool + 32-bit set", stock: 8, priceCents: 7400 },
     ],
     reviews: [
       {

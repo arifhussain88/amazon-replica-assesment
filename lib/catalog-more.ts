@@ -275,13 +275,14 @@ export const extraProducts: CatalogProduct[] = [
   },
   {
     slug: "claw-hammer",
+    imageFile: "claw-hammer.jpg",
     name: "16-Ounce Claw Hammer",
     brand: "Benchline",
     category: "tools",
     priceCents: 1800,
     shortDescription: "A household hammer with a smooth face and a curved claw.",
     description:
-      "Sixteen ounces, a hickory handle, and a curved claw for pulling finish nails. The face is smooth so it does not mark trim.",
+      "This claw hammer has a steel head and a handle you can grip with one hand. The face is smooth for household nails, and the curved claw pulls a bent finish nail. It is a bench tool, not a framing hammer.",
     features: ["16 oz head", "Smooth face", "Curved claw", "Hickory handle"],
     specifications: [
       { label: "Head", value: "16 oz steel" },
