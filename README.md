@@ -2,7 +2,7 @@
 
 A small general store inspired by Amazon.com. Shoppers browse departments, search, add items to a guest cart, sign in, and check out. Prices are in USD. Card numbers are validated and never charged or stored.
 
-**Live site:** https://amazon-rebuild-8x.vercel.app
+**Live site:** https://northline-revamp.vercel.app
 
 ## Stack
 
@@ -36,6 +36,18 @@ To use Neon instead, copy `.env.example` to `.env.local` and set `DATABASE_URL` 
 - Demo card: `4242 4242 4242 4242`, any future expiry, any 3–4 digit CVC.
 - Orders are listed under Account & Orders for the signed-in user.
 
+## This version
+
+The public site is a visual revamp of the same store. Catalog, cart, and checkout behavior are unchanged.
+
+- **Palette.** Berry primary `#7A1F3D`, gold accent `#E8A33D`, cream background `#FBF5EE`, white cards, muted text `#7d6a6f`, and an image backdrop of `#F3E9EC`. Shared cards use a 14px corner and a soft shadow.
+- **Homepage.** A solid berry hero with a real product photo, a category icon strip, a bento of featured products with captions on the photos, and a trust row. Search stays in the header only.
+- **Chrome and shopping.** The header, category bar, footer, listing cards, product gallery, variant picker, buy box, quick view, and cart drawer use the same palette. The cart still slides in from the right, and checkout still goes to `/checkout`.
+- **Photos.** Fifteen products use photographs in `public/images/products/`. The ceramic mug is at `/p/everyday-ceramic-mug`. The remaining catalog items still use the existing placeholders.
+- **API.** `npm test` runs 13 cases against the catalog, cart, and order routes.
+
 ## Deploy
 
-Production runs on Vercel and needs the same `DATABASE_URL` in the project environment (Production, Preview, and Development). PGlite does not persist on Vercel. Schema setup and catalog sync run when the app starts against Neon; existing rows are kept and missing catalog products are inserted.
+The live site is the Vercel project `northline-revamp`. Its `DATABASE_URL` is a separate Neon project, also named `northline-revamp`. That database is not the local `ui-revamp` branch and not the older production database. Set the pooled connection string on Production, Preview, and Development. PGlite does not persist on Vercel. Schema setup and catalog sync run when the app starts against Neon; existing rows are kept and missing catalog products are inserted.
+
+Local development keeps using `.env.local`. Leave that file pointed at the `ui-revamp` branch unless you mean to work against another database.
