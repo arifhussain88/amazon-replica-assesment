@@ -184,7 +184,7 @@ async function HomeContent() {
 function pickBento(products: ProductCard[], heroSlugUsed?: string) {
   const chosen = bentoSlugs
     .map((slug) => products.find((product) => product.slug === slug))
-    .filter((product): product is ProductCard => Boolean(product) && product.slug !== heroSlugUsed);
+    .filter((product): product is ProductCard => product != null && product.slug !== heroSlugUsed);
   const used = new Set(chosen.map((product) => product.slug));
   if (heroSlugUsed) used.add(heroSlugUsed);
   const fillers = products.filter((product) => !used.has(product.slug));
