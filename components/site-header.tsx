@@ -1,15 +1,16 @@
 import Link from "next/link";
 import { Suspense } from "react";
-import { ShoppingCart } from "lucide-react";
+import { CartDrawer } from "@/components/cart-drawer";
 import { DepartmentMenu } from "@/components/department-menu";
 import { SiteSearch } from "@/components/site-search";
 import { getCurrentUser } from "@/lib/auth";
-import { cartCount } from "@/lib/cart";
+import { readCart } from "@/lib/cart";
 import { listCategories } from "@/lib/queries";
 import { STORE_NAME } from "@/lib/store";
 
 export async function SiteHeader() {
-  const [count, categories, user] = await Promise.all([cartCount(), listCategories(), getCurrentUser()]);
+  const [{ lines, subtotalCents }, categories, user] = await Promise.all([readCart(), listCategories(), getCurrentUser()]);
+  const count = lines.reduce((sum, line) => sum + line.quantity, 0);
   const firstName = user?.name.split(" ")[0];
 
   return (
@@ -30,11 +31,7 @@ export async function SiteHeader() {
             <span className="block text-xs text-neutral-300">{user ? `Hello, ${firstName}` : "Hello, sign in"}</span>
             <span className="font-semibold">Account & Orders</span>
           </Link>
-          <Link href="/cart" className="relative inline-flex items-center gap-1 text-sm font-semibold">
-            <ShoppingCart className="size-6" />
-            <span className="absolute -top-2 left-4 rounded-full bg-[#f5b942] px-1.5 text-xs text-[#111]">{count}</span>
-            <span className="hidden md:inline">Cart</span>
-          </Link>
+          <CartDrawer lines={lines} subtotalCents={subtotalCents} count={count} />
         </div>
       </div>
       <div className="bg-[#232f3e]">

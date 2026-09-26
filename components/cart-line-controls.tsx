@@ -7,10 +7,12 @@ export function CartLineControls({
   itemId,
   quantity,
   stock,
+  idPrefix = "",
 }: {
   itemId: string;
   quantity: number;
   stock: number;
+  idPrefix?: string;
 }) {
   const router = useRouter();
   const [pending, setPending] = useState(false);
@@ -48,9 +50,9 @@ export function CartLineControls({
     <div className="mt-2 flex flex-wrap items-center gap-3">
       <form onSubmit={update} className="flex items-center gap-2 text-sm">
         <input type="hidden" name="itemId" value={itemId} />
-        <label htmlFor={`qty-${itemId}`}>Qty</label>
+        <label htmlFor={`${idPrefix}qty-${itemId}`}>Qty</label>
         <select
-          id={`qty-${itemId}`}
+          id={`${idPrefix}qty-${itemId}`}
           name="quantity"
           key={quantity}
           defaultValue={quantity}
