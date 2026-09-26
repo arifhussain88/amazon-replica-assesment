@@ -5,6 +5,8 @@ import { BuyBox } from "@/components/buy-box";
 import { Gallery } from "@/components/gallery";
 import { StarRating } from "@/components/star-rating";
 import { getProduct } from "@/lib/queries";
+import { cardSurface } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
@@ -54,26 +56,26 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           stock={product.stock}
           variants={product.variants}
         />
-        <section className="grid gap-8 rounded-md border border-border bg-card p-5 lg:col-start-1 lg:grid-cols-2">
+        <section className={cn(cardSurface, "grid gap-8 p-5 lg:col-start-1 lg:grid-cols-2")}>
         <div>
           <h2 className="text-xl font-semibold">About this item</h2>
           <p className="mt-3 text-sm leading-7">{product.description}</p>
         </div>
         <div>
           <h2 className="text-xl font-semibold">Specifications</h2>
-          <dl className="mt-3 divide-y divide-[#e3e6e6] text-sm">
+          <dl className="mt-3 divide-y divide-border text-sm">
             {product.specifications.map((spec) => (
               <div key={spec.label} className="grid grid-cols-2 gap-3 py-2">
-                <dt className="text-neutral-600">{spec.label}</dt>
+                <dt className="text-muted-foreground">{spec.label}</dt>
                 <dd>{spec.value}</dd>
               </div>
             ))}
           </dl>
         </div>
       </section>
-      <section className="rounded-md border border-border bg-card p-5 lg:col-start-1">
+      <section className={cn(cardSurface, "p-5 lg:col-start-1")}>
         <h2 className="text-xl font-semibold">Customer reviews</h2>
-        <p className="mt-1 text-sm text-neutral-600">These reviews are seeded demo data for this store.</p>
+        <p className="mt-1 text-sm text-muted-foreground">These reviews are seeded demo data for this store.</p>
         <div className="mt-4 grid gap-6 lg:grid-cols-[220px_minmax(0,1fr)]">
           <div>
             <StarRating ratingTimes10={product.ratingTimes10} count={product.ratingCount} />
@@ -81,9 +83,9 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
               {buckets.map((bucket) => (
                 <li key={bucket.star} className="grid grid-cols-[3rem_1fr_1.5rem] items-center gap-2">
                   <span>{bucket.star} star</span>
-                  <span className="h-2 overflow-hidden rounded bg-neutral-200">
+                  <span className="h-2 overflow-hidden rounded-full bg-image">
                     <span
-                      className="block h-full bg-[#e09a1a]"
+                      className="block h-full bg-accent"
                       style={{ width: `${product.ratingCount ? (bucket.count / product.ratingCount) * 100 : 0}%` }}
                     />
                   </span>
@@ -94,10 +96,10 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           </div>
           <ul className="space-y-5">
             {product.reviews.map((review) => (
-              <li key={review.id} className="border-b border-[#e3e6e6] pb-4">
+              <li key={review.id} className="border-b border-border pb-4">
                 <StarRating ratingTimes10={review.rating * 10} />
                 <p className="mt-1 font-semibold">{review.title}</p>
-                <p className="text-xs text-neutral-500">
+                <p className="text-xs text-muted-foreground">
                   {review.author} · {new Intl.DateTimeFormat("en-US", { dateStyle: "medium" }).format(new Date(review.createdAt))} · Demo review
                 </p>
                 <p className="mt-2 text-sm leading-6">{review.body}</p>

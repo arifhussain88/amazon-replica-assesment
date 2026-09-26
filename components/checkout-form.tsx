@@ -3,10 +3,12 @@
 import { useActionState, type ComponentProps } from "react";
 import { saveDelivery, type CheckoutState } from "@/app/actions/checkout";
 import { Button } from "@/components/ui/button";
+import { cardSurface } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { formatMoney } from "@/lib/money";
 import { shippingCents } from "@/lib/store";
+import { cn } from "@/lib/utils";
 import type { AddressInput } from "@/lib/validators";
 import type { CartLine } from "@/lib/types";
 
@@ -28,9 +30,9 @@ export function DeliveryForm({
 
   return (
     <form action={action} className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
-      <div className="space-y-4 rounded-md border border-[#e3e6e6] bg-white p-5">
+      <div className={cn(cardSurface, "space-y-4 p-5")}>
         <h2 className="text-lg font-semibold">Delivery details</h2>
-        <p className="text-sm text-neutral-600">Signing in as {email}. The next step is payment.</p>
+        <p className="text-sm text-muted-foreground">Signing in as {email}. The next step is payment.</p>
         <Field label="Full name" name="fullName" autoComplete="name" defaultValue={defaults?.fullName} />
         <Field label="Street address" name="line1" autoComplete="address-line1" defaultValue={defaults?.line1} />
         <div className="grid gap-3 sm:grid-cols-2">
@@ -45,7 +47,7 @@ export function DeliveryForm({
               id="country"
               name="country"
               defaultValue={defaults?.country ?? "United States"}
-              className="h-10 w-full rounded-md border border-[#888] bg-white px-3 text-sm"
+              className="h-10 w-full rounded-lg border border-input bg-card px-3 text-sm text-foreground"
             >
               <option>United States</option>
               <option>Canada</option>
@@ -73,7 +75,7 @@ export function CartSummary({
   shipping: number;
 }) {
   return (
-    <aside className="rounded-md border border-[#e3e6e6] bg-white p-5">
+    <aside className={cn(cardSurface, "p-5")}>
       <h2 className="text-lg font-semibold">Items</h2>
       <ul className="mt-4 space-y-3">
         {lines.map((line) => (
@@ -87,7 +89,7 @@ export function CartSummary({
           </li>
         ))}
       </ul>
-      <dl className="mt-4 space-y-2 border-t border-[#e3e6e6] pt-4 text-sm">
+      <dl className="mt-4 space-y-2 border-t border-border pt-4 text-sm">
         <div className="flex justify-between">
           <dt>Subtotal</dt>
           <dd>{formatMoney(subtotalCents)}</dd>

@@ -3,26 +3,29 @@
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --background: #ecfdf5;
-  --foreground: #064e3b;
+  --background: #fbf5ee;
+  --foreground: #2c1a1e;
   --card: #ffffff;
-  --card-foreground: #064e3b;
+  --card-foreground: #2c1a1e;
   --popover: #ffffff;
-  --popover-foreground: #064e3b;
-  --primary: #059669;
-  --primary-foreground: #000000;
-  --secondary: #10b981;
-  --secondary-foreground: #0f172a;
-  --muted: #e8f1f3;
-  --muted-foreground: #475569;
-  --accent: #d97706;
-  --accent-foreground: #000000;
+  --popover-foreground: #2c1a1e;
+  --primary: #7a1f3d;
+  --primary-foreground: #fbf5ee;
+  --primary-hover: color-mix(in srgb, #7a1f3d 86%, #000000);
+  --secondary: #f3e9ec;
+  --secondary-foreground: #7a1f3d;
+  --muted: #f3e9ec;
+  --muted-foreground: #7d6a6f;
+  --image: #f3e9ec;
+  --accent: #e8a33d;
+  --accent-foreground: #2c1a1e;
+  --accent-hover: color-mix(in srgb, #e8a33d 84%, #2c1a1e);
   --destructive: #dc2626;
   --destructive-foreground: #ffffff;
-  --border: #a7f3d0;
-  --input: #a7f3d0;
-  --ring: #059669;
-  --radius: 0.5rem;
+  --border: #e6d4d8;
+  --input: #e6d4d8;
+  --ring: #7a1f3d;
+  --radius: 0.875rem;
 }
 
 @theme inline {
@@ -34,12 +37,15 @@
   --color-popover-foreground: var(--popover-foreground);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
+  --color-primary-hover: var(--primary-hover);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
+  --color-image: var(--image);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
+  --color-accent-hover: var(--accent-hover);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
   --color-border: var(--border);
@@ -51,10 +57,10 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-  --shadow-sm: 0 0 #0000;
-  --shadow-md: 0 0 #0000;
-  --shadow-lg: 0 0 #0000;
-  --shadow-xl: 0 0 #0000;
+  --shadow-sm: 0 1px 2px rgb(44 26 30 / 0.05), 0 2px 8px rgb(44 26 30 / 0.04);
+  --shadow-md: 0 8px 20px rgb(44 26 30 / 0.1);
+  --shadow-lg: 0 14px 32px rgb(44 26 30 / 0.12);
+  --shadow-xl: 0 20px 40px rgb(44 26 30 / 0.14);
   --default-transition-duration: 200ms;
   --default-transition-timing-function: ease;
   --animate-marquee: marquee var(--duration) infinite linear;

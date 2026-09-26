@@ -22,7 +22,7 @@ export function QuickView({ product }: { product: ProductCard }) {
 
   const body = (
     <div className="grid gap-4 sm:grid-cols-[180px_1fr]">
-      <ProductImage src={product.imageUrl} alt={product.imageAlt} />
+      <ProductImage src={product.imageUrl} alt={product.imageAlt} frameClassName="shadow-sm" />
       <div className="space-y-3">
         <p className="text-sm text-muted-foreground">{product.brand}</p>
         <h2 className="font-sans text-lg font-semibold leading-snug text-foreground">{product.name}</h2>
@@ -49,7 +49,7 @@ export function QuickView({ product }: { product: ProductCard }) {
   const trigger = (
     <button
       type="button"
-      className="w-full cursor-pointer rounded-md border border-border bg-card px-3 py-2 text-sm font-medium text-foreground hover:border-primary hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+      className="w-full cursor-pointer rounded-lg border border-border bg-card px-3 py-2 text-sm font-medium text-foreground shadow-sm transition-shadow duration-200 ease-out hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
     >
       Quick view
     </button>
@@ -59,7 +59,7 @@ export function QuickView({ product }: { product: ProductCard }) {
     return (
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>{trigger}</DialogTrigger>
-        <DialogContent title="Quick view" className="border border-border bg-card shadow-none">
+        <DialogContent title="Quick view" className="rounded-lg bg-card shadow-md">
           {body}
         </DialogContent>
       </Dialog>
@@ -69,7 +69,7 @@ export function QuickView({ product }: { product: ProductCard }) {
   return (
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>{trigger}</SheetTrigger>
-      <SheetContent side="bottom" title="Quick view" className="border border-border bg-card shadow-none">
+      <SheetContent side="bottom" title="Quick view" className="rounded-t-lg bg-card shadow-md">
         {body}
       </SheetContent>
     </Sheet>

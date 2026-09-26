@@ -5,9 +5,11 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { CartSummary } from "@/components/checkout-form";
 import { Button } from "@/components/ui/button";
+import { cardSurface } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { shippingCents } from "@/lib/store";
+import { cn } from "@/lib/utils";
 import type { AddressInput } from "@/lib/validators";
 import type { CartLine } from "@/lib/types";
 
@@ -68,7 +70,7 @@ export function PaymentForm({
 
   return (
     <form onSubmit={onSubmit} className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">
-      <div className="space-y-4 rounded-md border border-[#e3e6e6] bg-white p-5">
+      <div className={cn(cardSurface, "space-y-4 p-5")}>
         <h2 className="text-lg font-semibold">Payment</h2>
         <p className="text-sm leading-6 text-neutral-700">
           {address.fullName}
@@ -79,10 +81,10 @@ export function PaymentForm({
           <br />
           {address.country}
         </p>
-        <Link href="/checkout" className="inline-block text-sm text-[#1a5276]">
+        <Link href="/checkout" className="inline-block text-sm text-primary">
           Edit delivery details
         </Link>
-        <p className="text-sm text-neutral-600">The card is validated and not charged. Use 4242 4242 4242 4242, any future expiry, and any 3-digit code.</p>
+        <p className="text-sm text-muted-foreground">The card is validated and not charged. Use 4242 4242 4242 4242, any future expiry, and any 3-digit code.</p>
         <Field label="Name on card" name="cardName" autoComplete="cc-name" />
         <Field label="Card number" name="cardNumber" inputMode="numeric" autoComplete="cc-number" />
         <div className="grid gap-3 sm:grid-cols-2">

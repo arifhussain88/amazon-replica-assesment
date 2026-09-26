@@ -56,7 +56,7 @@ export function CartLineControls({
           name="quantity"
           key={quantity}
           defaultValue={quantity}
-          className="h-9 rounded-md border border-[#888] bg-white px-2"
+          className="h-9 rounded-lg border border-input bg-card px-2 text-foreground"
         >
           {Array.from({ length: Math.max(quantity, Math.min(stock, 20)) }, (_, index) => (
             <option key={index + 1} value={index + 1}>
@@ -64,13 +64,13 @@ export function CartLineControls({
             </option>
           ))}
         </select>
-        <button type="submit" className="text-[#1a5276]">
+        <button type="submit" className="text-primary">
           Update
         </button>
       </form>
       <form onSubmit={remove}>
         <input type="hidden" name="itemId" value={itemId} />
-        <button type="submit" className="text-sm text-[#1a5276]">
+        <button type="submit" className="text-sm text-primary">
           Delete
         </button>
       </form>

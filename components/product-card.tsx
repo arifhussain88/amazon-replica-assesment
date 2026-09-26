@@ -4,6 +4,7 @@ import { CardMedia } from "@/components/card-media";
 import { PriceTag } from "@/components/price-tag";
 import { QuickView } from "@/components/quick-view";
 import { StarRating } from "@/components/star-rating";
+import { cardSurface } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import type { ProductCard as ProductCardData } from "@/lib/types";
 
@@ -19,8 +20,8 @@ export function ProductCard({
   const images = product.images.length > 0 ? product.images : [{ url: product.imageUrl, alt: product.imageAlt }];
 
   return (
-    <article className="flex h-full flex-col rounded-lg border border-border bg-card p-3">
-      <Link href={`/p/${product.slug}`} className={cn("block overflow-hidden rounded-md", emphasis && "min-h-48 flex-1")}>
+    <article className={cn(cardSurface, "flex h-full flex-col p-3")}>
+      <Link href={`/p/${product.slug}`} className={cn("block overflow-hidden rounded-lg", emphasis && "min-h-48 flex-1")}>
         <CardMedia images={images} fill={emphasis} />
       </Link>
       <p className="mt-3 text-xs text-muted-foreground">{product.brand}</p>

@@ -18,9 +18,9 @@ export function PriceTag({
   const compare = compareAtPriceCents && compareAtPriceCents > amount ? compareAtPriceCents : null;
   return (
     <p className="flex min-h-7 flex-wrap items-baseline gap-2">
-      {showFrom ? <span className="text-sm text-neutral-600">From</span> : null}
+      {showFrom ? <span className="text-sm text-muted-foreground">From</span> : null}
       <span className="text-lg font-semibold">{formatMoney(amount)}</span>
-      {compare ? <span className="text-sm text-neutral-500 line-through">{formatMoney(compare)}</span> : null}
+      {compare ? <span className="text-sm text-muted-foreground line-through">{formatMoney(compare)}</span> : null}
     </p>
   );
 }

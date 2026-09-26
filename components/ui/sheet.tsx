@@ -25,14 +25,14 @@ export function SheetContent({
       <Dialog.Overlay className="fixed inset-0 z-50 bg-black/50" />
       <Dialog.Content
         className={cn(
-          "fixed z-50 bg-white shadow-xl focus:outline-none",
-          side === "left" ? "inset-y-0 left-0 w-[min(100%,22rem)] overflow-y-auto" : "inset-x-0 bottom-0 max-h-[88vh] overflow-y-auto rounded-t-2xl",
+          "fixed z-50 bg-card shadow-md focus:outline-none",
+          side === "left" ? "inset-y-0 left-0 w-[min(100%,22rem)] overflow-y-auto" : "inset-x-0 bottom-0 max-h-[88vh] overflow-y-auto rounded-t-lg",
           className,
         )}
       >
-        <div className="flex items-center justify-between border-b border-[#d5d9d9] px-4 py-3">
+        <div className="flex items-center justify-between border-b border-border px-4 py-3">
           <Dialog.Title className="text-base font-semibold">{title}</Dialog.Title>
-          <Dialog.Close className="rounded-md p-1 hover:bg-neutral-100" aria-label="Close">
+          <Dialog.Close className="rounded-lg p-1 hover:bg-image" aria-label="Close">
             <X className="size-5" />
           </Dialog.Close>
         </div>

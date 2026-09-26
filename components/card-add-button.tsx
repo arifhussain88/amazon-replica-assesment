@@ -61,12 +61,12 @@ export function CardAddButton({
       <input type="hidden" name="quantity" value="1" />
       <div className="min-h-14">
         {variants.length > 0 ? (
-          <label className="block text-xs text-neutral-600">
+          <label className="block text-xs text-muted-foreground">
             {variants[0]?.optionName}
             <select
               value={variantId}
               onChange={(event) => setVariantId(event.target.value)}
-              className="mt-1 h-9 w-full rounded-md border border-[#888] bg-white px-2 text-sm text-[#111]"
+              className="mt-1 h-9 w-full rounded-lg border border-input bg-card px-2 text-sm text-foreground shadow-sm"
             >
               {variants.map((variant) => (
                 <option key={variant.id} value={variant.id} disabled={variant.stock <= 0}>
@@ -78,8 +78,8 @@ export function CardAddButton({
           </label>
         ) : null}
       </div>
-      {state.error ? <p className="text-xs text-[#b12704]">{state.error}</p> : null}
-      {state.ok ? <p className="text-xs text-[#067d62]">Added to cart</p> : null}
+      {state.error ? <p className="text-xs text-destructive">{state.error}</p> : null}
+      {state.ok ? <p className="text-xs text-primary">Added to cart</p> : null}
       <Button type="submit" className="w-full" disabled={pending || available <= 0}>
         {available <= 0 ? "Out of stock" : pending ? "Adding..." : "Add to cart"}
       </Button>

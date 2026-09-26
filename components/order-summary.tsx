@@ -1,19 +1,21 @@
 import { formatMoney } from "@/lib/money";
+import { cardSurface } from "@/components/ui/card";
 import type { OrderRecord } from "@/lib/types";
+import { cn } from "@/lib/utils";
 
 export function OrderSummary({ order }: { order: OrderRecord }) {
   const placed = new Intl.DateTimeFormat("en-US", { dateStyle: "medium" }).format(new Date(order.createdAt));
   return (
     <div className="space-y-6">
       <div>
-        <p className="text-sm text-neutral-600">Order {order.orderNumber}</p>
+        <p className="text-sm text-muted-foreground">Order {order.orderNumber}</p>
         <h1 className="text-2xl font-semibold">Thanks, {order.fullName.split(" ")[0]}. Your order is placed.</h1>
-        <p className="mt-2 text-sm text-neutral-600">
+        <p className="mt-2 text-sm text-muted-foreground">
           A confirmation is stored for {order.email}. Placed {placed}. Status: {order.status}.
         </p>
       </div>
       <div className="grid gap-4 lg:grid-cols-2">
-        <section className="rounded-md border border-[#e3e6e6] bg-white p-5">
+        <section className={cn(cardSurface, "p-5")}>
           <h2 className="font-semibold">Ship to</h2>
           <p className="mt-2 text-sm leading-6">
             {order.fullName}
@@ -25,7 +27,7 @@ export function OrderSummary({ order }: { order: OrderRecord }) {
             {order.country}
           </p>
         </section>
-        <section className="rounded-md border border-[#e3e6e6] bg-white p-5 text-sm">
+        <section className={cn(cardSurface, "p-5 text-sm")}>
           <h2 className="font-semibold">Total</h2>
           <dl className="mt-2 space-y-1">
             <div className="flex justify-between">
@@ -43,7 +45,7 @@ export function OrderSummary({ order }: { order: OrderRecord }) {
           </dl>
         </section>
       </div>
-      <ul className="divide-y divide-[#e3e6e6] rounded-md border border-[#e3e6e6] bg-white">
+      <ul className={cn(cardSurface, "divide-y divide-border")}>
         {order.items.map((item) => (
           <li key={item.id} className="flex items-start justify-between gap-4 p-4 text-sm">
             <span>

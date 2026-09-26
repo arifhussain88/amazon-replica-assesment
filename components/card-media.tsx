@@ -20,7 +20,7 @@ export function CardMedia({
 
   return (
     <div
-      className={cn("group relative overflow-hidden bg-muted", fill ? "aspect-[16/10]" : "aspect-square")}
+      className={cn("group relative overflow-hidden rounded-lg bg-image", fill ? "aspect-[16/10]" : "aspect-square")}
       onMouseEnter={() => {
         if (slides.length > 1) setActive(1);
       }}

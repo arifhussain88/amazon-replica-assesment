@@ -3,9 +3,11 @@ import Link from "next/link";
 import { CartLineControls } from "@/components/cart-line-controls";
 import { ProductImage } from "@/components/product-image";
 import { Button } from "@/components/ui/button";
+import { cardSurface } from "@/components/ui/card";
 import { readCart } from "@/lib/cart";
 import { formatMoney } from "@/lib/money";
 import { FREE_SHIPPING_CENTS, shippingCents } from "@/lib/store";
+import { cn } from "@/lib/utils";
 
 export const metadata: Metadata = { title: "Cart" };
 
@@ -14,24 +16,24 @@ export default async function CartPage() {
   const shipping = shippingCents(subtotalCents);
   return (
     <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_300px]">
-      <section className="rounded-md bg-white p-5">
+      <section className={cn(cardSurface, "p-5")}>
         <h1 className="text-2xl font-semibold">Shopping cart</h1>
         {lines.length === 0 ? (
           <p className="mt-4 text-sm">
-            Your cart is empty. <Link href="/search" className="text-[#1a5276]">Continue shopping</Link>
+            Your cart is empty. <Link href="/search" className="text-primary">Continue shopping</Link>
           </p>
         ) : (
-          <ul className="mt-4 divide-y divide-[#e3e6e6]">
+          <ul className="mt-4 divide-y divide-border">
             {lines.map((line) => (
               <li key={line.id} className="grid grid-cols-[96px_minmax(0,1fr)] gap-4 py-4">
                 <Link href={`/p/${line.slug}`}>
                   <ProductImage src={line.imageUrl} alt={line.imageAlt} />
                 </Link>
                 <div>
-                  <Link href={`/p/${line.slug}`} className="font-medium hover:text-[#1a5276]">
+                  <Link href={`/p/${line.slug}`} className="font-medium hover:text-primary">
                     {line.name}
                   </Link>
-                  {line.variantLabel ? <p className="text-sm text-neutral-600">{line.variantLabel}</p> : null}
+                  {line.variantLabel ? <p className="text-sm text-muted-foreground">{line.variantLabel}</p> : null}
                   <p className="mt-1 text-sm font-semibold">{formatMoney(line.unitPriceCents)}</p>
                   <CartLineControls itemId={line.id} quantity={line.quantity} stock={line.stock} />
                 </div>
@@ -40,12 +42,12 @@ export default async function CartPage() {
           </ul>
         )}
       </section>
-      <aside className="h-fit rounded-md border border-[#e3e6e6] bg-white p-5">
+      <aside className={cn(cardSurface, "h-fit p-5")}>
         <p className="text-lg">
           Subtotal ({lines.reduce((sum, line) => sum + line.quantity, 0)} items):{" "}
           <span className="font-semibold">{formatMoney(subtotalCents)}</span>
         </p>
-        <p className="mt-2 text-sm text-neutral-600">
+        <p className="mt-2 text-sm text-muted-foreground">
           {subtotalCents >= FREE_SHIPPING_CENTS || subtotalCents === 0
             ? `Free shipping from ${formatMoney(FREE_SHIPPING_CENTS)}.`
             : `Shipping ${formatMoney(shipping)}. Add ${formatMoney(FREE_SHIPPING_CENTS - subtotalCents)} for free shipping.`}

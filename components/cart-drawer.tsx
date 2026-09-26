@@ -117,20 +117,20 @@ export function CartDrawer({
           role="dialog"
           aria-modal="true"
           aria-labelledby={titleId}
-          className="fixed inset-y-0 right-0 z-50 flex h-dvh w-full max-w-full flex-col border-l border-border bg-card sm:max-w-sm"
+          className="fixed inset-y-0 right-0 z-50 flex h-dvh w-full max-w-full flex-col overflow-hidden bg-background shadow-lg sm:max-w-sm sm:rounded-l-lg"
           initial={reduce ? false : { x: "100%" }}
           animate={{ x: 0 }}
           exit={reduce ? { opacity: 1 } : { x: "100%" }}
           transition={reduce ? { duration: 0 } : spring}
         >
-          <div className="flex items-center justify-between gap-3 border-b border-border px-4 py-3">
-            <h2 id={titleId} className="font-sans text-lg font-semibold text-foreground">
+          <div className="flex items-center justify-between gap-3 bg-primary px-4 py-3 text-primary-foreground">
+            <h2 id={titleId} className="font-sans text-lg font-semibold">
               Cart
             </h2>
             <button
               type="button"
               data-drawer-close=""
-              className="cursor-pointer rounded-md border border-border px-3 py-1.5 text-sm text-foreground hover:border-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              className="cursor-pointer rounded-lg bg-accent px-3 py-1.5 text-sm font-medium text-accent-foreground shadow-sm transition-colors duration-200 ease-out hover:bg-accent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 focus-visible:ring-offset-primary"
               onClick={() => {
                 syncMotion();
                 setOpen(false);
@@ -147,9 +147,9 @@ export function CartDrawer({
               </Link>
             </p>
           ) : (
-            <ul className="min-h-0 flex-1 divide-y divide-border overflow-y-auto px-4">
+            <ul className="min-h-0 flex-1 space-y-3 overflow-y-auto px-4 py-4">
               {lines.map((line) => (
-                <li key={line.id} className="grid grid-cols-[4rem_minmax(0,1fr)] gap-3 py-4">
+                <li key={line.id} className="grid grid-cols-[4rem_minmax(0,1fr)] gap-3 rounded-lg bg-card p-3 shadow-sm">
                   <Link href={`/p/${line.slug}`}>
                     <ProductImage src={line.imageUrl} alt={line.imageAlt} frameClassName="p-1" />
                   </Link>
@@ -165,7 +165,7 @@ export function CartDrawer({
               ))}
             </ul>
           )}
-          <div className="border-t border-border px-4 py-4">
+          <div className="border-t border-border bg-card px-4 py-4">
             <p className="text-sm text-foreground">
               Subtotal ({itemCount} {itemCount === 1 ? "item" : "items"}):{" "}
               <span className="font-semibold">{formatMoney(subtotalCents)}</span>
@@ -210,8 +210,8 @@ export function CartDrawer({
           setOpen(true);
         }}
       >
-        <ShoppingCart className="size-6" />
-        <span className="absolute -top-2 left-4 rounded-full bg-[#f5b942] px-1.5 text-xs text-[#111]">{count}</span>
+        <ShoppingCart className="size-6 text-accent" />
+        <span className="absolute -top-2 left-4 rounded-full bg-accent px-1.5 text-xs text-accent-foreground">{count}</span>
         <span className="hidden md:inline">Cart</span>
       </button>
       {mounted ? createPortal(panel, document.body) : null}

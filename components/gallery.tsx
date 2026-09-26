@@ -46,8 +46,8 @@ export function Gallery({ images, name }: { images: { url: string; alt: string }
             aria-current={index === active ? "true" : undefined}
             aria-label={`Show photo ${index + 1} of ${slides.length}`}
             className={cn(
-              "cursor-pointer overflow-hidden rounded-md border bg-muted transition-[border-color,opacity] duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-              index === active ? "border-primary" : "border-border opacity-80 hover:opacity-100",
+              "cursor-pointer overflow-hidden rounded-lg border bg-image shadow-sm transition-[border-color,opacity,box-shadow] duration-200 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+              index === active ? "border-accent ring-2 ring-accent" : "border-border opacity-80 hover:opacity-100 hover:shadow-md",
             )}
           >
             <Frame src={image.url} alt="" />
@@ -56,7 +56,7 @@ export function Gallery({ images, name }: { images: { url: string; alt: string }
       </div>
       <div className="min-w-0">
         <div
-          className="relative aspect-square overflow-hidden rounded-md border border-border bg-muted"
+          className="relative aspect-[4/3] max-h-72 overflow-hidden rounded-lg bg-image shadow-sm lg:aspect-square lg:max-h-none"
           onPointerMove={(event) => {
             if (event.pointerType !== "mouse" && !locked) return;
             track(event);
@@ -82,7 +82,7 @@ export function Gallery({ images, name }: { images: { url: string; alt: string }
               <Frame
                 src={current.url}
                 alt={current.alt || name}
-                className="p-3"
+                className="absolute inset-0 aspect-auto"
                 style={{
                   transform: zoomed ? "scale(1.8)" : "scale(1)",
                   transformOrigin: `${point.x}% ${point.y}%`,
@@ -94,7 +94,7 @@ export function Gallery({ images, name }: { images: { url: string; alt: string }
         </div>
         <button
           type="button"
-          className="mt-2 cursor-pointer rounded-md border border-border bg-card px-3 py-2 text-sm text-foreground transition-opacity duration-200 ease-out hover:opacity-80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="mt-2 cursor-pointer rounded-lg border border-border bg-card px-3 py-2 text-sm text-foreground shadow-sm transition-shadow duration-200 ease-out hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           aria-pressed={locked}
           onClick={() => {
             setLocked((value) => !value);
@@ -121,11 +121,11 @@ function Frame({
 }) {
   const [failed, setFailed] = useState(false);
   return (
-    <div className={cn("flex aspect-square items-center justify-center bg-muted", className)}>
+    <div className={cn("flex aspect-square w-full items-center justify-center overflow-hidden bg-image", className)}>
       {src && !failed ? (
         // Product photos are local studio crops with mixed dimensions.
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={src} alt={alt} style={style} className="h-full w-full object-contain" onError={() => setFailed(true)} />
+        <img src={src} alt={alt} style={style} className="h-full w-full object-cover object-center" onError={() => setFailed(true)} />
       ) : (
         <span className="text-3xl font-semibold text-muted-foreground" aria-hidden>
           {(alt || "N").slice(0, 1)}

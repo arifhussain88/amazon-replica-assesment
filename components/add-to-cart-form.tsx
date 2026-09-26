@@ -90,7 +90,7 @@ export function AddToCartForm({
                     type="button"
                     disabled={variant.stock <= 0}
                     onClick={() => setVariantId(variant.id)}
-                    className={`rounded-md border px-3 py-1.5 text-sm disabled:opacity-40 ${active ? "border-[#e77600] ring-2 ring-[#f5b942]" : "border-[#d5d9d9]"}`}
+                    className={`rounded-lg border px-3 py-1.5 text-sm shadow-sm disabled:opacity-40 ${active ? "border-accent bg-accent text-accent-foreground" : "border-border bg-card text-foreground hover:shadow-md"}`}
                   >
                     {variant.optionValue}
                   </button>
@@ -100,7 +100,7 @@ export function AddToCartForm({
           </fieldset>
         ) : null}
       </div>
-      <p className={`text-sm ${available > 0 ? "text-[#067d62]" : "text-[#b12704]"}`}>
+      <p className={`text-sm ${available > 0 ? "text-primary" : "text-destructive"}`}>
         {available > 0 ? (available <= 5 ? `Only ${available} left in stock` : "In stock") : "Out of stock"}
       </p>
       <label className="flex items-center gap-2 text-sm">
@@ -109,7 +109,7 @@ export function AddToCartForm({
           name="quantity"
           value={quantity}
           onChange={(event) => setQuantity(Number(event.target.value))}
-          className="h-10 rounded-md border border-[#888] bg-white px-2"
+          className="h-10 rounded-lg border border-input bg-card px-2 text-foreground shadow-sm"
         >
           {Array.from({ length: Math.max(1, Math.min(available, 20)) }, (_, index) => (
             <option key={index + 1} value={index + 1}>
@@ -118,8 +118,8 @@ export function AddToCartForm({
           ))}
         </select>
       </label>
-      {state.error ? <p className="text-sm text-[#b12704]">{state.error}</p> : null}
-      {state.ok && !compact ? <p className="text-sm text-[#067d62]">Added to cart.</p> : null}
+      {state.error ? <p className="text-sm text-destructive">{state.error}</p> : null}
+      {state.ok && !compact ? <p className="text-sm text-primary">Added to cart.</p> : null}
       <Button type="submit" size={compact ? "default" : "lg"} className="w-full" disabled={pending || available <= 0}>
         {pending ? "Adding..." : "Add to cart"}
       </Button>
